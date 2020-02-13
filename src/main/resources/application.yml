@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: production
+  application:
+    name: HotelSPP
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://ec2-54-195-252-243.eu-west-1.compute.amazonaws.com:5432/d8dvmgprs6ool3?sslmode=require}
+    username: ${SPRING_DATASOURCE_USERNAME:jmovznubutymft}
+    password: ${SPRING_DATASOURCE_PASSWORD:f2281ec75913ba5e357f8957d08475647faf15c0be71fee9a03db1caa1cfdcf1}
