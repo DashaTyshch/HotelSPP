@@ -1,34 +1,57 @@
 import React from "react";
-import {Dialog, DialogTitle, Button, Grid, Link, TextField} from "@material-ui/core";
+import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
     paper: {
-        margin: theme.spacing(3, 0),
+        margin: theme.spacing(0, 0, 3, 0),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
     },
+    title: {
+        textAlign: "center",
+        color: theme.palette.turquoise.backgroundColor,
+        letterSpacing: "0.009em",
+        fontWeight: "bold",
+    },
     form: {
         width: '80%',
-        marginTop: theme.spacing(1),
         '& label.Mui-focused': {
-            color: theme.palette.secondary.main,
+            color: theme.palette.turquoise.backgroundColor,
         },
         '& .MuiInput-underline:after': {
-            borderBottomColor: theme.palette.turquoise,
+            borderBottomColor: theme.palette.turquoise.backgroundColor,
         },
     },
-        submit: {
+    submit: {
         margin: theme.spacing(3, 0, 2),
+        backgroundColor: theme.palette.lightBlue.backgroundColor,
+        color: theme.palette.lightBlue.color,
+        '&:hover': {
+            backgroundColor: theme.palette.blue.backgroundColor,
+            color: theme.palette.blue.color
+        },
     },
+    signUp: {
+        textAlign: "center",
+        '& span:hover': {
+            color: theme.palette.beige.backgroundColor,
+            textDecoration: "underline",
+            cursor: "pointer"
+        },
+    }
 }));
 
 export default function LoginModal(props) {
 
     return(
         <Dialog onClose={props.close}  open={props.open}>
-            <DialogTitle style={{textAlign: "center"}}>Ввійдіть у систему</DialogTitle>
+            <DialogTitle className={useStyles().title}>HotelSPP</DialogTitle>
+            <Typography variant="body1" align="center">
+                Ввійдіть у систему
+            </Typography>
             <div className={useStyles().paper}>
                 <form className={useStyles().form} noValidate>
                     <TextField
@@ -57,23 +80,14 @@ export default function LoginModal(props) {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        color="primary"
                         className={useStyles().submit}
                     >
-                        Sign In
+                        Ввійти
                     </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
+                    <div className={useStyles().signUp}>
+                        {'Ще не створили акаунт? '}
+                        <span>Зареєструватися</span>
+                    </div>
                 </form>
             </div>
         </Dialog>
