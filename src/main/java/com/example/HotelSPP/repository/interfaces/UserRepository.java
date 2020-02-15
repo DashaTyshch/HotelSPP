@@ -8,7 +8,7 @@ public interface UserRepository {
 
     User addUser(User user);
 
-    Optional<User> findUserById(int id);
+    Optional<User> findUserById(Long id);
     Optional<User> findUserByEmail(String searchStr);
     Optional<User> findUserByPhone(String searchStr);
 }

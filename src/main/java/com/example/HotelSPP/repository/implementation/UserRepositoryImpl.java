@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -39,6 +42,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Value("${sql.insert.user}")
     private String ADD_USER;
+
+    @Value("${sql.select.userById}")
+    private String GET_USER_BY_ID;
+
 //    @Value("${sql.select.userById}")
 //    private String GET_USER_BY_ID;
 //    @Value("${sql.select.userByEmailOrNick}")
@@ -72,8 +79,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findUserById(int id) {
-        return null;
+    public Optional<User> findUserById(Long id) {
+        User res;
+        try {
+            res = namedTemplate.queryForObject(GET_USER_BY_ID, new MapSqlParameterSource(
+                    paramUserId, id), new UserMapper());
+        }catch(EmptyResultDataAccessException e){
+            log.warn(String.format("Couldn't find user by id: %s", id));
+            res = null;
+        }
+        return Optional.ofNullable(res);
     }
 
     @Override
