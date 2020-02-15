@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import {Footer} from "./common/footer.jsx";
 import {Header} from "./common/header.jsx";
 import {colorTheme} from "./themes/colors.jsx";
+import LoginModal from "./common/loginModal.jsx";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,18 +20,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function App(props) {
+    const [open, setOpen] = React.useState(false);
 
     return (
         <ThemeProvider theme={colorTheme}>
             <div className={useStyles().root}>
-                <Header/>
+                <Header openLogin={() => setOpen(true)}/>
                 <Container component="main" className={useStyles().main} maxWidth="sm">
                     <h1>My React App!</h1>
                 </Container>
 
-
                 <Footer/>
             </div>
+
+        <LoginModal open={open} close={() => setOpen(false)}/>
         </ThemeProvider>
     );
 }

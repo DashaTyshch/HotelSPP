@@ -22,7 +22,7 @@ export const Header = props => {
                 <Typography variant="h6" className={useStyles().title}>
                     HotelSPP
                 </Typography>
-                <Button color="inherit">Ввійти</Button>
+                <Button color="inherit" onClick={props.openLogin}>Ввійти</Button>
             </Toolbar>
         </AppBar>
     );
