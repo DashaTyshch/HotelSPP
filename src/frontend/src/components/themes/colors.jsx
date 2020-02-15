@@ -13,7 +13,7 @@ export const colorTheme = createMuiTheme({
 
         },
         turquoise: {
-            backgroundColor: '#116466',
+            backgroundColor: '#31708E',
             color: '#fff',
         },
         beige: {
@@ -23,6 +23,14 @@ export const colorTheme = createMuiTheme({
         lightBeige: {
             backgroundColor: "#FFCB9A",
             color: "#000"
+        },
+        blue: {
+            backgroundColor: "#5085A5",
+            color: "#fff"
+        },
+        lightBlue: {
+            backgroundColor: "#8FC1E3",
+            color: "#fff"
         }
     },
 });
