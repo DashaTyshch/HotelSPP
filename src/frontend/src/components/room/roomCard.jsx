@@ -4,16 +4,20 @@ import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Carousel from 'react-material-ui-carousel';
 import Paper from "@material-ui/core/Paper";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
+import Divider from "@material-ui/core/Divider";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         maxWidth: 345,
         boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14)," +
             " 0px 1px 3px 0px rgba(0,0,0,0.12)",
         borderRadius: "4px",
-        backgroundColor: "#fff",
+        backgroundColor: theme.palette.secondary.main,
+        color: theme.palette.secondary.contrastText,
+        "&:hover" : {
+            boxShadow: "0px 2px 1px -1px #31708e9e, 0px 1px 1px 0px #31708e7a," +
+                "0px 1px 10px 0px #31708e96",
+        }
     },
     actionButton: {
         width: "100%",
@@ -56,8 +60,17 @@ const useStyles = makeStyles({
     },
     gridListTile: {
         margin: "30px",
+    },
+    type: {
+        letterSpacing: "0.07em",
+    },
+    price: {
+        color: theme.palette.primary.main
+    },
+    info: {
+        color: theme.palette.lightBlue.backgroundColor
     }
-});
+}));
 
 export default function RoomCard(props) {
     const classes = useStyles();
@@ -69,7 +82,7 @@ export default function RoomCard(props) {
                     return <div key={index} className={classes.gridListTile}>
                         <div  className={classes.root}>
                             <button className={classes.actionButton}>
-                                <Carousel interval={8000}>
+                                <Carousel interval={9000}>
                                     <Paper>
                                         <img src={"../img/img26.jpg"} alt={"room"} className={classes.img}/>
                                     </Paper>
@@ -81,18 +94,19 @@ export default function RoomCard(props) {
                                     </Paper>
                                 </Carousel>
                                 <div style={{padding: "16px", textAlign: "center"}}>
-                                    <h2>
+                                    <h2 className={classes.type}>
                                         Люкс
                                     </h2>
-                                    <h3>
+                                    <h2 className={classes.price}>
+                                        UAH 900
+                                    </h2>
+                                    <Divider light />
+                                    <h3 className={classes.info}>
                                         Спальних місць: 4
                                     </h3>
-                                    <h3>
-                                        UAH 900
-                                    </h3>
-                                    <h4>
+                                    <h3 className={classes.info}>
                                         К-ть вільних: 3
-                                    </h4>
+                                    </h3>
                                 </div>
                             </button>
                         </div>
