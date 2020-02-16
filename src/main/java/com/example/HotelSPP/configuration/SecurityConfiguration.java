@@ -1,4 +1,4 @@
-package com.example.HotelSPP.consiguration;
+package com.example.HotelSPP.configuration;
 
 import com.example.HotelSPP.security.AuthenticationFilter;
 import com.example.HotelSPP.security.CustomUserDetailsService;

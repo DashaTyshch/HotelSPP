@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from 'react-redux';
 
 import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 
-import {setLoginOpen} from "../../store/actions";
+import {setLoginOpen, userLoginFetch} from "../../store/actions";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -49,6 +49,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function LoginModal(props) {
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        props.userLoginFetch(phone, password);
+    };
 
     return(
         <Dialog onClose={() => props.onSetLoginOpen(false)}  open={props.open}>
@@ -57,7 +64,7 @@ function LoginModal(props) {
                 Ввійдіть у систему
             </Typography>
             <div className={useStyles().paper}>
-                <form className={useStyles().form} noValidate>
+                <form className={useStyles().form} noValidate onSubmit={handleSubmit}>
                     <TextField
                         size="small"
                         margin="normal"
@@ -68,6 +75,8 @@ function LoginModal(props) {
                         name="phone"
                         autoComplete="phone"
                         autoFocus
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                     />
                     <TextField
                         size="small"
@@ -78,6 +87,8 @@ function LoginModal(props) {
                         label="Пароль"
                         type="password"
                         id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
 
                     <Button
@@ -106,6 +117,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSetLoginOpen: (isOpen) => dispatch(setLoginOpen(isOpen)),
+        userLoginFetch: (phone, pwd) => dispatch(userLoginFetch(phone, pwd))
     };
 };
 
