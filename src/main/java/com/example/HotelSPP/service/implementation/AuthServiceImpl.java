@@ -34,17 +34,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String authenticateUser(LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return tokenProvider.generateToken(authentication);
-        }// catch (LockedException ex) {
-           // throw new LockedException("Account is not verified by email ! Please check your mail !");
-        //}
-        catch (AuthenticationException ex) {
-            log.error(ex.getMessage());
-            throw new LoginException("Login or password was incorrect !");
-        }
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            return tokenProvider.generateToken(authentication);
+//        }// catch (LockedException ex) {
+//           // throw new LockedException("Account is not verified by email ! Please check your mail !");
+//        //}
+//        catch (AuthenticationException ex) {
+//            log.error(ex.getMessage());
+//            throw new LoginException("Login or password was incorrect !");
+//        }
+        return "";
     }
 }
