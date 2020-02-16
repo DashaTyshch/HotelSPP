@@ -1,7 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
+import { connect } from 'react-redux';
+
 import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
+
+import {setLoginOpen, userLoginFetch} from "../../store/actions";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -44,16 +48,23 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function LoginModal(props) {
+function LoginModal(props) {
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        props.userLoginFetch(phone, password);
+    };
 
     return(
-        <Dialog onClose={props.close}  open={props.open}>
+        <Dialog onClose={() => props.onSetLoginOpen(false)}  open={props.open}>
             <DialogTitle className={useStyles().title}>HotelSPP</DialogTitle>
             <Typography variant="body1" align="center">
                 Ввійдіть у систему
             </Typography>
             <div className={useStyles().paper}>
-                <form className={useStyles().form} noValidate>
+                <form className={useStyles().form} noValidate onSubmit={handleSubmit}>
                     <TextField
                         size="small"
                         margin="normal"
@@ -64,6 +75,8 @@ export default function LoginModal(props) {
                         name="phone"
                         autoComplete="phone"
                         autoFocus
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                     />
                     <TextField
                         size="small"
@@ -74,6 +87,8 @@ export default function LoginModal(props) {
                         label="Пароль"
                         type="password"
                         id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
 
                     <Button
@@ -92,4 +107,18 @@ export default function LoginModal(props) {
             </div>
         </Dialog>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        open: state.loginOpen,
+    };
 };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSetLoginOpen: (isOpen) => dispatch(setLoginOpen(isOpen)),
+        userLoginFetch: (phone, pwd) => dispatch(userLoginFetch(phone, pwd))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
