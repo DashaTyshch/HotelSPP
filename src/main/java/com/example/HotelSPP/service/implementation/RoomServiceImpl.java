@@ -18,16 +18,8 @@ public class RoomServiceImpl {
 
 
             if(roomDAO.roomTypeAvailable(name)){
-                RoomType rt = new RoomType();
-
                 int id = UUID.randomUUID().hashCode();
-                rt.setId(id);
-                rt.setAmount(amount);
-                rt.setDescription(description);
-                rt.setName(name);
-                rt.setDiscount(discount);
-                rt.setPlaces(places);
-                rt.setPrice(price);
+                RoomType rt = new RoomType(id, name,  description,  amount,  price,  places,  discount);
                 roomDAO.addRoomType(rt);
                 return 1;
             }

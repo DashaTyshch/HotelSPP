@@ -20,6 +20,16 @@ public class RoomType {
     private @NotNull int places;
     private @NotNull int discount;
 
+    public RoomType(int id,String name, String description, int amount, float price, int places, int discount){
+        this.setId(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.setAmount(amount);
+        this.setPrice(price);
+        this.setPlaces(places);
+        this.setDiscount(discount);
+    }
+
     public int getId() {
         return id;
     }
