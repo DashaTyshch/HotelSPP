@@ -22,10 +22,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    /*@Autowired
+    @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;*/
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenProvider tokenProvider;
     /*@Autowired
@@ -33,10 +33,16 @@ public class AuthServiceImpl implements AuthService {
 */
 
     @Override
+    public Boolean isUserPhoneUnique(String phone) {
+        return !userRepository.findUserByPhone(phone).isPresent();
+    }
+
+    @Override
     public String authenticateUser(LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginRequest.getLogin(),
+                            loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return tokenProvider.generateToken(authentication);
         }// catch (LockedException ex) {

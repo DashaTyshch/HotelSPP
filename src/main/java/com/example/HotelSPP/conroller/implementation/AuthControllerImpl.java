@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -22,7 +21,7 @@ public class AuthControllerImpl implements AuthController {
     private AuthService authService;
 
     @Override
-    public ResponseEntity<String> authenticateUser(@Valid LoginRequest loginRequest) {
+    public ResponseEntity<String> authenticateUser(LoginRequest loginRequest) {
         String token = authService.authenticateUser(loginRequest);
         return ResponseEntity.ok(token);
     }

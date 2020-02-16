@@ -31,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
     private String paramUserPhone;
     @Value("${user.surname}")
     private String paramUserSurname;
-    @Value("${user.name}")
+    @Value("${user.name_var}")
     private String paramUserName;
     @Value("${user.email}")
     private String paramUserEmail;
@@ -46,12 +46,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Value("${sql.select.userById}")
     private String GET_USER_BY_ID;
 
-//    @Value("${sql.select.userById}")
-//    private String GET_USER_BY_ID;
-//    @Value("${sql.select.userByEmailOrNick}")
-//    private String GET_USER_BY_EMAIL;
-//    @Value("${sql.select.userByEmailOrNick}")
-//    private String GET_USER_BY_PHONE;
+    @Value("${sql.select.userByEmail}")
+    private String GET_USER_BY_EMAIL;
+    @Value("${sql.select.userByPhone}")
+    private String GET_USER_BY_PHONE;
+
+    @Value("${const.searchStr}")
+    private String paramUserSearchStr;
 
     @Autowired
     private JdbcTemplate template;
@@ -73,9 +74,9 @@ public class UserRepositoryImpl implements UserRepository {
             //throw RepositoryUtils.toDatabaseException(e, "Sorry, service can't create user now !");
         }
 
-        Optional<User> createdUser = findUserByEmail(user.getEmail());
+        Optional<User> createdUser = findUserByPhone(user.getPhone());
         return createdUser.orElseThrow(
-                () -> new ResourceNotFoundException("User", "email", user.getEmail()));
+                () -> new ResourceNotFoundException("User", "phone", user.getPhone()));
     }
 
     @Override
@@ -93,18 +94,43 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findUserByEmail(String searchStr) {
-        return null;
+        User res;
+        try {
+            res = namedTemplate.queryForObject(GET_USER_BY_EMAIL, new MapSqlParameterSource(
+                    paramUserSearchStr, searchStr), new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            log.warn(String.format("Couldn't find user by email: %s", searchStr));
+            res = null;
+        } catch (DataAccessException e) {
+            throw e;
+            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by email !");
+        }
+        return Optional.ofNullable(res);
     }
 
     @Override
-    public Optional<User> findUserByPhone(String searchStr) {
-        return null;
+    public Optional<User> findUserByPhone(String phone) {
+        User res;
+        try {
+            log.debug("kek");
+            res = namedTemplate.queryForObject(GET_USER_BY_PHONE, new MapSqlParameterSource(
+                    paramUserPhone, phone), new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            log.warn(String.format("Couldn't find user by phone: %s", phone));
+            res = null;
+        } catch (DataAccessException e) {
+            log.error("Error: ", e);
+            throw e;
+            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by phone !");
+        }
+        return Optional.ofNullable(res);
     }
 
 
     private class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int arg1) throws SQLException {
+            log.info("User variable: {}", paramUserName);
             return User.builder()
                     .id(rs.getInt(paramUserId))
                     .phone(rs.getString(paramUserPhone))

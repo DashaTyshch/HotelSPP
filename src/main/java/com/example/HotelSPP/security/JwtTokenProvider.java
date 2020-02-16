@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@PropertySource("classpath:/application.yml")
 public class JwtTokenProvider {
 
     @Value("${app.jwtSecret}")
@@ -37,12 +36,12 @@ public class JwtTokenProvider {
         return generateTokenBody(auth, lifeInMs).compact();
     }
 
-    public Long getUserIdFromJWT(String token) {
+    public String getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        return Long.parseLong(claims.getSubject());
+        return claims.getSubject();
     }
 
     Collection<GrantedAuthority> getAuthoritiesFromJWT(String token) {
@@ -89,7 +88,7 @@ public class JwtTokenProvider {
                 .setSubject(Long.toString(userPrincipal.getUser().getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .claim(ROLES_CLAIM_NAME, roles);
     }
 
