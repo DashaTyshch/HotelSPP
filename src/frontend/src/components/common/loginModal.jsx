@@ -1,7 +1,11 @@
 import React from "react";
+import { connect } from 'react-redux';
+
 import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
+
+import {setLoginOpen} from "../../store/actions";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -44,10 +48,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function LoginModal(props) {
+function LoginModal(props) {
 
     return(
-        <Dialog onClose={props.close}  open={props.open}>
+        <Dialog onClose={() => props.onSetLoginOpen(false)}  open={props.open}>
             <DialogTitle className={useStyles().title}>HotelSPP</DialogTitle>
             <Typography variant="body1" align="center">
                 Ввійдіть у систему
@@ -92,4 +96,17 @@ export default function LoginModal(props) {
             </div>
         </Dialog>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        open: state.loginOpen,
+    };
 };
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSetLoginOpen: (isOpen) => dispatch(setLoginOpen(isOpen)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
