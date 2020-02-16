@@ -6,6 +6,7 @@ import {Footer} from "./common/footer.jsx";
 import {Header} from "./common/header.jsx";
 import {colorTheme} from "./themes/colors.jsx";
 import LoginModal from "./common/loginModal.jsx";
+import RoomCard from "./room/roomCard.jsx";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles(theme => ({
     main: {
         marginTop: theme.spacing(8),
         marginBottom: theme.spacing(2),
+        maxWidth: '100%'
     },
 }));
 
@@ -27,7 +29,7 @@ function App(props) {
             <div className={useStyles().root}>
                 <Header openLogin={() => setOpen(true)}/>
                 <Container component="main" className={useStyles().main} maxWidth="sm">
-                    <h1>My React App!</h1>
+                    <RoomCard/>
                 </Container>
 
                 <Footer/>
