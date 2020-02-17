@@ -173,7 +173,7 @@ public class RoomRepositoryImpl implements RoomRepository {
             List<Map<String, Object>> rows =  jdbcTemplate.queryForList(GET_ALL_ROOM_TYPES);
 
             for (Map row : rows) {
-                RoomType obj = new RoomType(((String) row.get("name")),
+                RoomType obj = new RoomType(0,((String) row.get("name")),
                         ((String) row.get("description")),
                         ((Integer) row.get("amount")),
                         ((Float) row.get("price")),
@@ -199,7 +199,6 @@ public class RoomRepositoryImpl implements RoomRepository {
         public RoomType mapRow(ResultSet rs, int arg1) throws SQLException {
             log.info("Room type variable: {}", paramRoomTypeName);
             return RoomType.builder()
-                    .id(rs.getInt(paramRoomTypeId))
                     .name(rs.getString(paramRoomTypeName))
                     .description(rs.getString(paramRoomTypeDescription))
                     .amount(rs.getInt(paramRoomTypeAmount))
@@ -209,5 +208,4 @@ public class RoomRepositoryImpl implements RoomRepository {
                     .build();
         }
     }
-
 }

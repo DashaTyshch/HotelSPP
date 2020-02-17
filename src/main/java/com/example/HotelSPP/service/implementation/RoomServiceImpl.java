@@ -20,7 +20,7 @@ public class RoomServiceImpl implements RoomService {
 
 
         if(roomRepository.roomTypeAvailable(name)){
-            RoomType rt = new RoomType( name,  description,  amount,  price,  places,  discount);
+            RoomType rt = new RoomType(0, name,  description,  amount,  price,  places,  discount);
             roomRepository.addRoomType(rt);
             return 1;
         }
