@@ -20,26 +20,28 @@ export function setLoginOpen(isOpen) {
     };
 }
 
-export const fetchUserInfo = () => {
+export function fetchUserInfo() {
     return dispatch => {
-        return fetch("/api/user/info", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${getToken()}`
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                dispatch(setUser(data));
+        if (getToken()) {
+            return fetch("/api/user/info", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
             })
+                .then(response => response.json())
+                .then(data => {
+                    dispatch(setUser(data));
+                })
 
-            .catch(err => {
-                console.log("fetch error" + err);
-            });
+                .catch(err => {
+                    console.log("fetch error" + err);
+                });
+        }
     }
-};
+}
 
 export const userLoginFetch = (phone, pwd) => {
     return dispatch => {
@@ -54,8 +56,7 @@ export const userLoginFetch = (phone, pwd) => {
             .then(response => response.text())
             .then(data => {
                 localStorage.setItem("token", data);
-                dispatch(fetchUserInfo());
-                //location.reload();
+                location.reload();
             })
 
             .catch(err => {

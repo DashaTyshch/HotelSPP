@@ -26,7 +26,10 @@ const Header = props => {
                 <Typography variant="h6" className={useStyles().title}>
                     HotelSPP
                 </Typography>
-                <Button color="inherit" onClick={() => props.onSetLoginOpen(true)}>Ввійти</Button>
+                {props.user == null ?
+                    <Button color="inherit" onClick={() => props.onSetLoginOpen(true)}>Ввійти</Button>
+                    : <Button color="inherit">Вийти</Button>
+                }
             </Toolbar>
         </AppBar>
     );
@@ -34,6 +37,7 @@ const Header = props => {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.user
     };
 };
 const mapDispatchToProps = (dispatch) => {

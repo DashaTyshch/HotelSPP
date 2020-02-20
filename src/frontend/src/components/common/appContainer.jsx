@@ -25,8 +25,7 @@ const useStyles = makeStyles(theme => ({
 function AppContainer(props) {
 
     useEffect( () => {
-        if(localStorage.getItem("token"))
-            props.fetchUserInfo();
+        props.fetchUserInfo();
     }, []);
 
     return (
