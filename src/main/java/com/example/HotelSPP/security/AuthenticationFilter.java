@@ -37,9 +37,9 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         try {
             Optional<String> jwt = tokenProvider.getJwtFromRequest(request);
             if (jwt.isPresent() && StringUtils.hasText(jwt.get()) && tokenProvider.validateToken(jwt.get())) {
-                String userPhone = tokenProvider.getUserIdFromJWT(jwt.get());
+                Long userId = tokenProvider.getUserIdFromJWT(jwt.get());
 
-                UserDetails userDetails = service.loadUserByUsername(userPhone);
+                UserDetails userDetails = service.loadUserById(userId);
 
                 List<GrantedAuthority> grantedAuthorities = new ArrayList<>(userDetails.getAuthorities());
                 grantedAuthorities.addAll(tokenProvider.getAuthoritiesFromJWT(jwt.get()));

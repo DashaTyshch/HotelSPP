@@ -1,4 +1,4 @@
-package com.example.HotelSPP.conroller;
+package com.example.HotelSPP.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 

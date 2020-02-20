@@ -97,7 +97,6 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         RoomType res;
         try {
-            log.debug("kek");
             res = namedTemplate.queryForObject(GET_ROOM_TYPE_BY_ID, new MapSqlParameterSource(
                     paramRoomTypeId, id), new RoomTypeMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -115,7 +114,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     public Optional<RoomType> findRoomTypeByName(String name) {
         RoomType res;
         try {
-            log.debug("kek");
             res = namedTemplate.queryForObject(GET_ROOM_TYPE_BY_NAME, new MapSqlParameterSource(
                     paramRoomTypeName, name), new RoomTypeMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -133,7 +131,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     public Optional<RoomType> findRoomTypesByPrice(float price) {
         RoomType res;
         try {
-            log.debug("kek");
             res = namedTemplate.queryForObject(GET_ROOM_TYPE_BY_PRICE, new MapSqlParameterSource(
                     paramRoomTypePrice, price), new RoomTypeMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -151,7 +148,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     public Optional<RoomType> findRoomTypesByPlaces(int places) {
         RoomType res;
         try {
-            log.debug("kek");
             res = namedTemplate.queryForObject(GET_ROOM_TYPE_BY_PLACES, new MapSqlParameterSource(
                     paramRoomTypePlaces, places), new RoomTypeMapper());
         } catch (EmptyResultDataAccessException e) {

@@ -1,5 +1,15 @@
+export const SET_USER = 'SET_USER';
 export const LOGIN_OPEN = 'LOGIN_OPEN';
 export const LOGIN = 'LOGIN';
+
+export function setUser(user) {
+    return {
+        type: SET_USER,
+        payload: {
+            user: user
+        },
+    };
+}
 
 export function setLoginOpen(isOpen) {
     return {
@@ -9,6 +19,27 @@ export function setLoginOpen(isOpen) {
         },
     };
 }
+
+export const fetchUserInfo = () => {
+    return dispatch => {
+        return fetch("/api/user/info", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                dispatch(setUser(data));
+            })
+
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+    }
+};
 
 export const userLoginFetch = (phone, pwd) => {
     return dispatch => {
@@ -20,16 +51,19 @@ export const userLoginFetch = (phone, pwd) => {
             },
             body: JSON.stringify({login: phone, password: pwd})
         })
-            .then(resp => resp.json())
+            .then(response => response.text())
             .then(data => {
-                if (data.message) {
-                    // Here you should have logic to handle invalid login credentials.
-                    // This assumes your Rails API will return a JSON object with a key of
-                    // 'message' if there is an error
-                } else {
-                    localStorage.setItem("token", data)
-                    //dispatch(loginUser(data.user))
-                }
+                localStorage.setItem("token", data);
+                dispatch(fetchUserInfo());
+                //location.reload();
             })
+
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
     }
-}
+};
+
+const getToken = () => {
+    return localStorage.getItem('token');
+};

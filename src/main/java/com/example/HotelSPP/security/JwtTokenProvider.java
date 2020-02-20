@@ -36,12 +36,12 @@ public class JwtTokenProvider {
         return generateTokenBody(auth, lifeInMs).compact();
     }
 
-    public String getUserIdFromJWT(String token) {
+    public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        return Long.parseLong(claims.getSubject());
     }
 
     Collection<GrantedAuthority> getAuthoritiesFromJWT(String token) {

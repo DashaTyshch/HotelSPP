@@ -1,11 +1,10 @@
-package com.example.HotelSPP.conroller.interfaces;
+package com.example.HotelSPP.controller.interfaces;
 
 import com.example.HotelSPP.entity.request.LoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Validated

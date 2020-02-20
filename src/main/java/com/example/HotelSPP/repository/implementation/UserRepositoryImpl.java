@@ -112,7 +112,6 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findUserByPhone(String phone) {
         User res;
         try {
-            log.debug("kek");
             res = namedTemplate.queryForObject(GET_USER_BY_PHONE, new MapSqlParameterSource(
                     paramUserPhone, phone), new UserMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -132,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
         public User mapRow(ResultSet rs, int arg1) throws SQLException {
             log.info("User variable: {}", paramUserName);
             return User.builder()
-                    .id(rs.getInt(paramUserId))
+                    .id(rs.getLong(paramUserId))
                     .phone(rs.getString(paramUserPhone))
                     .surname(rs.getString(paramUserSurname))
                     .name(rs.getString(paramUserName))

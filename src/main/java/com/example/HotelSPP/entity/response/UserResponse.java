@@ -1,20 +1,17 @@
-package com.example.HotelSPP.entity;
+package com.example.HotelSPP.entity.response;
 
+import com.example.HotelSPP.entity.UserRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
-@Getter
 @ToString
+@Getter
 @Builder
-public class User {
-    private Long id;
-    private @NotNull String phone;
+public class UserResponse {
     private @NotNull String surname;
     private @NotNull String name;
-    private @NotNull String email;
-    private @NotNull String password;
     private @NotNull UserRole role;
 }
