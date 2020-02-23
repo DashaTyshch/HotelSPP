@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import {setLoginOpen} from "../../store/actions";
+import {setLoginOpen, logOut} from "../../store/actions";
 
 const useStyles = makeStyles(theme => ({
     menuButton: {
@@ -28,7 +28,7 @@ const Header = props => {
                 </Typography>
                 {props.user == null ?
                     <Button color="inherit" onClick={() => props.onSetLoginOpen(true)}>Ввійти</Button>
-                    : <Button color="inherit">Вийти</Button>
+                    : <Button color="inherit" onClick={props.logOut}>Вийти</Button>
                 }
             </Toolbar>
         </AppBar>
@@ -43,6 +43,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSetLoginOpen: (isOpen) => dispatch(setLoginOpen(isOpen)),
+        logOut: () => dispatch(logOut()),
     };
 };
 

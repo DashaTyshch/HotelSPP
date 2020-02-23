@@ -65,6 +65,17 @@ export const userLoginFetch = (phone, pwd) => {
     }
 };
 
+export const logOut = () => {
+    return () => {
+        removeToken();
+        location.reload();
+    }
+};
+
+
 const getToken = () => {
     return localStorage.getItem('token');
+};
+const removeToken = () => {
+    localStorage.removeItem("token");
 };
