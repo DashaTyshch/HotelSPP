@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import { BrowserRouter } from 'react-router-dom';
 
 import {ThemeProvider} from '@material-ui/core/styles';
 
@@ -16,9 +17,11 @@ function App(props) {
 
     return (
         <Provider store={store}>
-            <ThemeProvider theme={colorTheme}>
-                <AppContainer />
-            </ThemeProvider>
+            <BrowserRouter>
+                <ThemeProvider theme={colorTheme}>
+                    <AppContainer/>
+                </ThemeProvider>
+            </BrowserRouter>
         </Provider>
     );
 }

@@ -1,24 +1,18 @@
 import React, {useEffect} from "react";
 
-import Container from '@material-ui/core/Container';
 import {makeStyles} from '@material-ui/core/styles';
 import Header from "./header.jsx";
 import LoginModal from "./loginModal.jsx";
 import {Footer} from "./footer.jsx";
-import RoomCard from "../room/roomCard.jsx";
 import {fetchUserInfo} from "../../store/actions";
 import {connect} from "react-redux";
+import Main from "./main.jsx";
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-    },
-    main: {
-        marginTop: theme.spacing(8),
-        marginBottom: theme.spacing(2),
-        maxWidth: '100%'
     },
 }));
 
@@ -32,9 +26,7 @@ function AppContainer(props) {
         <>
             <div className={useStyles().root}>
                 <Header/>
-                <Container component="main" className={useStyles().main} maxWidth="sm">
-                    <RoomCard/>
-                </Container>
+                <Main/>
 
                 <Footer/>
             </div>
