@@ -4,6 +4,7 @@ package com.example.HotelSPP.repository.implementation;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.exceptions.ResourceNotFoundException;
 import com.example.HotelSPP.repository.interfaces.RoomRepository;
+import com.sun.tools.javac.comp.Check;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -93,7 +94,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
 
     @Override
-    public Optional<RoomType> findRoomTypeById(Long id) {
+    public Optional<RoomType> findRoomTypeById(long id) {
 
         RoomType res;
         try {
@@ -163,6 +164,39 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
+    public Optional<RoomType> updateRoomType(RoomType rt) {
+        RoomType res;
+        RoomType current;
+        String updateSql = "UPDATE room_type SET ";
+        Optional<RoomType> db_res;
+        try {
+            db_res = findRoomTypeById(rt.getId());
+            if (db_res.isPresent()) {
+                current = db_res.get();
+                if (!rt.getName().equals(current.getName())) updateSql += " name= " + rt.getName();
+                if (!rt.getDescription().equals(current.getDescription())) updateSql += " description= " + rt.getDescription() + ", ";
+                if (rt.getAmount() != (current.getAmount())) updateSql += " amount= " + rt.getAmount() + ", ";
+                if (rt.getPrice() != (current.getPrice())) updateSql += " price= " + rt.getPrice() + ", ";
+                if (rt.getPlaces() != (current.getPlaces())) updateSql += " places= " + rt.getPlaces() + ", ";
+                if (rt.getDiscount() != (current.getDiscount())) updateSql += " discount= " + rt.getDiscount() + ", ";
+                updateSql += " WHERE id =" + current.getId();
+//                TODO Query for update
+//                Check.
+                //                namedTemplate.update();
+            } else {
+            }
+//            return Optional.ofNullable(current);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        return Optional.empty();
+    }
+
+
+
+    @Override
     public Optional<List<RoomType>> findAllRoomTypes() {
         List<RoomType> res = new ArrayList<>();
         try {
@@ -176,7 +210,7 @@ public class RoomRepositoryImpl implements RoomRepository {
                         ((Integer) row.get("places")),
                         ((Integer) row.get("discount")));
 
-                obj.setId((int) row.get("id"));
+                obj.setId((long)row.get("id"));
                 res.add(obj);
             }
         } catch (EmptyResultDataAccessException e) {

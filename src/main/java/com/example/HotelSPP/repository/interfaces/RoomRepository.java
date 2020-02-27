@@ -9,9 +9,11 @@ public interface RoomRepository {
     boolean roomTypeAvailable(String name);
     RoomType addRoomType(RoomType roomType);
 
-    Optional<RoomType> findRoomTypeById(Long id);
+    Optional<RoomType> findRoomTypeById(long id);
     Optional<RoomType> findRoomTypeByName(String name);
     Optional<RoomType> findRoomTypesByPrice(float price);
     Optional<RoomType> findRoomTypesByPlaces(int places);
+    Optional<RoomType> updateRoomType(RoomType rt);
+
     Optional<List<RoomType>> findAllRoomTypes();
 }

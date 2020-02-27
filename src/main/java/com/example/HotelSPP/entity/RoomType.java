@@ -12,7 +12,7 @@ import javax.validation.constraints.Null;
 @ToString
 @Builder
 public class RoomType {
-    private int id;
+    private long id;
     private @NotNull String name;
     private @NotNull String description;
     private @NotNull int amount;
@@ -20,7 +20,7 @@ public class RoomType {
     private @NotNull int places;
     private @NotNull int discount;
 
-    public RoomType(int id,String name, String description, int amount, float price, int places, int discount){
+    public RoomType(long id,String name, String description, int amount, float price, int places, int discount){
         this.setName(name);
         this.setDescription(description);
         this.setAmount(amount);
@@ -29,11 +29,11 @@ public class RoomType {
         this.setDiscount(discount);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

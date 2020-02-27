@@ -32,9 +32,15 @@ public class RoomServiceImpl implements RoomService {
         return 0;
     }
 
-
+//  TODO call Repository addRoomType()
     @Override
     public int createRoomType(String name) {
+        return 0;
+    }
+
+//  TODO call Repository updateRoomType()
+    @Override
+    public int updateRoomType(String name) {
         return 0;
     }
 }
