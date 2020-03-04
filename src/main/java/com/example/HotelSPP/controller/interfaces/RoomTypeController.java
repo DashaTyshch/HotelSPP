@@ -14,6 +14,4 @@ public interface RoomTypeController {
     @PutMapping("/update")
     ResponseEntity<UserResponse> getUserInfo();
 
-    @GetMapping()
-    ResponseEntity<UserResponse> getUserInfo();
 }
