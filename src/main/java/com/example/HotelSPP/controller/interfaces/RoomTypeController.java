@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/room_type")
 public interface RoomTypeController {
 
-    @PutMapping("/update")
+    @GetMapping()
     ResponseEntity<UserResponse> getUserInfo();
+
+
+    @PutMapping("/update")
+    ResponseEntity<UserResponse> putUserInfo();
 
 }

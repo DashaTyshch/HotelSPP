@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.HotelSPP.entity.RoomType;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -32,15 +33,10 @@ public class RoomServiceImpl implements RoomService {
         return 0;
     }
 
-//  TODO call Repository addRoomType()
-    @Override
-    public int createRoomType(String name) {
-        return 0;
-    }
 
-//  TODO call Repository updateRoomType()
     @Override
-    public int updateRoomType(String name) {
+    public int updateRoomType(RoomType rt) {
+        Optional<RoomType> p = roomRepository.updateRoomType(rt);
         return 0;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.HotelSPP.service.interfaces;
 
+import com.example.HotelSPP.entity.RoomType;
+
 public interface RoomService {
-    int createRoomType(String name);
-    int updateRoomType(String name);
+    int updateRoomType(RoomType rt);
 }

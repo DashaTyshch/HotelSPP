@@ -26,6 +26,11 @@ public class RoomTypeControllerImpl implements RoomTypeController {
         return ResponseEntity.ok(service.getUserInfo(user.getId()));
     }
 
+    @Override
+    public ResponseEntity<UserResponse> putUserInfo() {
+        return null;
+    }
+
     private User getCurrentUser() {
         return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }

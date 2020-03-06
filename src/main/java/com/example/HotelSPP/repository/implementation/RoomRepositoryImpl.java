@@ -1,6 +1,8 @@
 
 package com.example.HotelSPP.repository.implementation;
 
+import java.sql.Types;
+import org.springframework.jdbc.support.KeyHolder;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.exceptions.ResourceNotFoundException;
 import com.example.HotelSPP.repository.interfaces.RoomRepository;
@@ -14,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -106,7 +109,7 @@ public class RoomRepositoryImpl implements RoomRepository {
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for room type by !");
+//            throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for room type by !");
         }
         return Optional.ofNullable(res);
     }
@@ -165,27 +168,53 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public Optional<RoomType> updateRoomType(RoomType rt) {
-        RoomType res;
         RoomType current;
         String updateSql = "UPDATE room_type SET ";
         Optional<RoomType> db_res;
         try {
             db_res = findRoomTypeById(rt.getId());
             if (db_res.isPresent()) {
+
+                ArrayList<Object> params = new ArrayList<>();
+                ArrayList<Integer> types = new ArrayList<>();
                 current = db_res.get();
-                if (!rt.getName().equals(current.getName())) updateSql += " name= " + rt.getName();
-                if (!rt.getDescription().equals(current.getDescription())) updateSql += " description= " + rt.getDescription() + ", ";
-                if (rt.getAmount() != (current.getAmount())) updateSql += " amount= " + rt.getAmount() + ", ";
-                if (rt.getPrice() != (current.getPrice())) updateSql += " price= " + rt.getPrice() + ", ";
-                if (rt.getPlaces() != (current.getPlaces())) updateSql += " places= " + rt.getPlaces() + ", ";
-                if (rt.getDiscount() != (current.getDiscount())) updateSql += " discount= " + rt.getDiscount() + ", ";
+                if (!rt.getName().equals(current.getName())){
+                    updateSql += " name= " + rt.getName();
+                    params.add(rt.getName());
+                    types.add(Types.VARCHAR);
+                }
+                if (!rt.getDescription().equals(current.getDescription())) {
+                    updateSql += " description= " + rt.getDescription() + ", ";
+                    params.add(rt.getDescription());
+                    types.add(Types.VARCHAR);
+                }
+                if (rt.getAmount() != (current.getAmount())) {
+                    updateSql += " amount= " + rt.getAmount() + ", ";
+                    params.add(rt.getAmount());
+                    types.add(Types.INTEGER);
+                }
+                if (rt.getPrice() != (current.getPrice())){
+                    updateSql += " price= " + rt.getPrice() + ", ";
+                    params.add(rt.getPrice());
+                    types.add(Types.FLOAT);
+                }
+                if (rt.getPlaces() != (current.getPlaces())) {
+                    updateSql += " places= " + rt.getPlaces() + ", ";
+                    params.add(rt.getPlaces());
+                    types.add(Types.INTEGER);
+                }
+                if (rt.getDiscount() != (current.getDiscount())) {
+                    updateSql += " discount= " + rt.getDiscount() + ", ";
+                    params.add(rt.getDiscount());
+                    types.add(Types.INTEGER);
+                }
                 updateSql += " WHERE id =" + current.getId();
-//                TODO Query for update
-//                Check.
-                //                namedTemplate.update();
-            } else {
+
+                int rows = namedTemplate.update(updateSql,(SqlParameterSource) params,(KeyHolder) types);
+                System.out.println(rows + " row(s) updated.");
+                db_res = findRoomTypeById(rt.getId());
+                return db_res;
             }
-//            return Optional.ofNullable(current);
 
         } catch (Exception e) {
             e.printStackTrace();
