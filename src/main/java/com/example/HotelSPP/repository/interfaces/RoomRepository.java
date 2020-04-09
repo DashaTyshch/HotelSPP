@@ -15,5 +15,5 @@ public interface RoomRepository {
     Optional<RoomType> findRoomTypesByPlaces(int places);
     Optional<RoomType> updateRoomType(RoomType rt);
 
-    Optional<List<RoomType>> findAllRoomTypes();
+    List<RoomType> getAllRoomTypes();
 }

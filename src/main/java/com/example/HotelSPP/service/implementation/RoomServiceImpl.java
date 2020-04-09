@@ -62,4 +62,9 @@ public class RoomServiceImpl implements RoomService {
 
         return true;
     }
+
+    @Override
+    public List<RoomType> getAllRoomTypes() {
+        return roomRepository.getAllRoomTypes();
+    }
 }

@@ -94,7 +94,6 @@ public class RoomRepositoryImpl implements RoomRepository {
                 () -> new ResourceNotFoundException("RoomType", "name", roomType.getName()));
     }
 
-
     @Override
     public Optional<RoomType> findRoomTypeById(long id) {
 
@@ -221,41 +220,22 @@ public class RoomRepositoryImpl implements RoomRepository {
         return Optional.empty();
     }
 
-
-
     @Override
-    public Optional<List<RoomType>> findAllRoomTypes() {
-        List<RoomType> res = new ArrayList<>();
+    public List<RoomType> getAllRoomTypes() {
         try {
-            List<Map<String, Object>> rows =  jdbcTemplate.queryForList(GET_ALL_ROOM_TYPES);
-
-            for (Map row : rows) {
-                RoomType obj = new RoomType(0,((String) row.get("name")),
-                        ((String) row.get("description")),
-                        ((Integer) row.get("amount")),
-                        ((Float) row.get("price")),
-                        ((Integer) row.get("places")),
-                        ((Integer) row.get("discount")));
-
-                obj.setId((long)row.get("id"));
-                res.add(obj);
-            }
-        } catch (EmptyResultDataAccessException e) {
-            log.warn(String.format("Couldn't find room types: %s"));
-            res = null;
+            return Collections.unmodifiableList(namedTemplate.query(GET_ALL_ROOM_TYPES, new RoomTypeMapper()));
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for room type by !");
         }
-        return Optional.ofNullable(res);
-
     }
+
     private class RoomTypeMapper implements RowMapper<RoomType> {
         @Override
         public RoomType mapRow(ResultSet rs, int arg1) throws SQLException {
             log.info("Room type variable: {}", paramRoomTypeName);
             return RoomType.builder()
+                    .id(rs.getInt(paramRoomTypeId))
                     .name(rs.getString(paramRoomTypeName))
                     .description(rs.getString(paramRoomTypeDescription))
                     .amount(rs.getInt(paramRoomTypeAmount))

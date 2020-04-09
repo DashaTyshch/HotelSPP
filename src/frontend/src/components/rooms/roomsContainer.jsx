@@ -1,12 +1,35 @@
-import React from "react";
-import RoomCard from "./roomCard.jsx";
+import React, { useEffect, useState } from "react";
+import RoomCards from "./roomCard.jsx";
 import connect from "react-redux/es/connect/connect";
+import {getToken} from "../../store/actions";
 
 function RoomsContainer(props) {
+    const [rooms, setRooms] = useState(null);
+
+    useEffect( () => {
+        fetch("/api/room_type/all", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                setRooms(data);
+            })
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+
+    }, []);
 
     return (
         <>
-            <RoomCard/>
+            {rooms !== null &&
+                <RoomCards rooms={rooms}/>
+            }
         </>
     );
 }

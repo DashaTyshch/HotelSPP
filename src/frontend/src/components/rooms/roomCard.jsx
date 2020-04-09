@@ -1,6 +1,4 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Carousel from 'react-material-ui-carousel';
 import Paper from "@material-ui/core/Paper";
@@ -72,37 +70,37 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function RoomCard(props) {
+export default function RoomCards(props) {
     const classes = useStyles();
-    const elements = [1,2, 3, 4, 5, 6];
+
     return (
         <>
             <div className={classes.gridList}>
-                {elements.map((value, index) => {
-                    return <div key={index} className={classes.gridListTile}>
-                        <div  className={classes.root}>
+                {props.rooms.map((room, index) => {
+                    return <div key={room.name} className={classes.gridListTile}>
+                        <div className={classes.root}>
                             <button className={classes.actionButton}>
                                 <Carousel interval={9000}>
                                     <Paper>
-                                        <img src={"../img/img26.jpg"} alt={"room"} className={classes.img}/>
+                                        <img src={"../img/img26.jpg"} alt={room.name} className={classes.img}/>
                                     </Paper>
                                     <Paper>
-                                        <img src={"../img/img27.jpg"} alt={"room"} className={classes.img}/>
+                                        <img src={"../img/img27.jpg"} alt={room.name} className={classes.img}/>
                                     </Paper>
                                     <Paper>
-                                        <img src={"../img/img25.jpg"} alt={"room"} className={classes.img}/>
+                                        <img src={"../img/img25.jpg"} alt={room.name} className={classes.img}/>
                                     </Paper>
                                 </Carousel>
                                 <div style={{padding: "16px", textAlign: "center"}}>
                                     <h2 className={classes.type}>
-                                        Люкс
+                                        {room.name}
                                     </h2>
                                     <h2 className={classes.price}>
-                                        UAH 900
+                                        UAH {room.price}
                                     </h2>
                                     <Divider light />
                                     <h3 className={classes.info}>
-                                        Спальних місць: 4
+                                        Спальних місць: {room.places}
                                     </h3>
                                     <h3 className={classes.info}>
                                         К-ть вільних: 3
