@@ -1,21 +1,15 @@
 package com.example.HotelSPP.controller.interfaces;
 
-import com.example.HotelSPP.entity.response.UserResponse;
+import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RequestMapping("/api/room_type")
 public interface RoomTypeController {
 
-    @GetMapping()
-    ResponseEntity<UserResponse> getUserInfo();
-
-
-    @PutMapping("/update")
-    ResponseEntity<UserResponse> putUserInfo();
+    @PostMapping("/create")
+    ResponseEntity<String> postRoomType(@RequestBody RoomTypeRequest roomType);
 
 }

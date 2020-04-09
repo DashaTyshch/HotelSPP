@@ -1,17 +1,18 @@
 package com.example.HotelSPP.entity.request;
 
-import com.example.HotelSPP.entity.RoomType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ToString
 @Setter
 @Getter
 public class RoomTypeRequest {
-    private @NotBlank String login;
-    private @NotBlank String password;
-    private @NotBlank RoomType roomtype;
+    private @NotNull String name;
+    private @NotNull String description;
+    private @NotNull int amount;
+    private @NotNull float price;
+    private @NotNull int places;
 }

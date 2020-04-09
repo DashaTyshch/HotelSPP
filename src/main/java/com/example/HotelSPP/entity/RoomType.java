@@ -61,7 +61,7 @@ public class RoomType {
         this.amount = quantity;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

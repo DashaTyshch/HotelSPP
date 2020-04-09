@@ -32,7 +32,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Value("${room_type.id}")
     private String paramRoomTypeId;
-    @Value("${room_type.name}")
+    @Value("${room_type.name_var}")
     private String paramRoomTypeName;
     @Value("${room_type.description}")
     private String paramRoomTypeDescription;
@@ -76,14 +76,13 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public RoomType addRoomType(RoomType roomType) {
-
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(paramRoomTypeName, roomType.getName());
         paramMap.put(paramRoomTypeDescription, roomType.getDescription());
         paramMap.put(paramRoomTypeAmount, roomType.getAmount());
         paramMap.put(paramRoomTypePrice, roomType.getPrice());
         paramMap.put(paramRoomTypePlaces, roomType.getPlaces());
-        paramMap.put(paramRoomTypeDiscount, roomType.getDescription());
+        paramMap.put(paramRoomTypeDiscount, 0);
         try {
             namedTemplate.update(ADD_ROOM_TYPE, paramMap);
         } catch (DataAccessException e) {
@@ -126,7 +125,6 @@ public class RoomRepositoryImpl implements RoomRepository {
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for room type by !");
         }
         return Optional.ofNullable(res);
     }

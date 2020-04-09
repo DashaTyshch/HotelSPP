@@ -65,6 +65,7 @@ export const userLoginFetch = (phone, pwd) => {
     }
 };
 
+
 export const logOut = () => {
     return () => {
         removeToken();
@@ -73,7 +74,7 @@ export const logOut = () => {
 };
 
 
-const getToken = () => {
+export const getToken = () => {
     return localStorage.getItem('token');
 };
 const removeToken = () => {
