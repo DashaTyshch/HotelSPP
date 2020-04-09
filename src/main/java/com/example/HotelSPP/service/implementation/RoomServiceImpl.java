@@ -37,6 +37,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public RoomType getRoomType(String name) {
+        return roomRepository.findRoomTypeByName(name).orElse(null);
+    }
+
+    @Override
     public int updateRoomType(RoomType rt) {
         Optional<RoomType> p = roomRepository.updateRoomType(rt);
         return 0;

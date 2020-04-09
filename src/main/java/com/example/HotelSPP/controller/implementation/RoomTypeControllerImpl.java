@@ -21,6 +21,11 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     private RoomService service;
 
     @Override
+    public ResponseEntity<RoomType> getRoomType(String name) {
+        return ResponseEntity.ok(service.getRoomType(name));
+    }
+
+    @Override
     public ResponseEntity<List<RoomType>> getAllRoomTypes() {
         return ResponseEntity.ok(service.getAllRoomTypes());
     }

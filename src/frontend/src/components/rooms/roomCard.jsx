@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Carousel from 'react-material-ui-carousel';
 import Paper from "@material-ui/core/Paper";
@@ -73,11 +75,15 @@ const useStyles = makeStyles(theme => ({
 export default function RoomCards(props) {
     const classes = useStyles();
 
+    const roomAction = (name) => {
+        window.location.href = `/roomType/${name}`;
+    };
+
     return (
         <>
             <div className={classes.gridList}>
-                {props.rooms.map((room, index) => {
-                    return <div key={room.name} className={classes.gridListTile}>
+                {props.rooms.map((room) => {
+                    return <Link to={`/roomType/${room.name}`}><div key={room.name} className={classes.gridListTile} >
                         <div className={classes.root}>
                             <button className={classes.actionButton}>
                                 <Carousel interval={9000}>
@@ -108,7 +114,7 @@ export default function RoomCards(props) {
                                 </div>
                             </button>
                         </div>
-                    </div>
+                    </div></Link>
                 })}
             </div>
 

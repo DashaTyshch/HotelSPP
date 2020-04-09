@@ -12,7 +12,6 @@ function RoomsContainer(props) {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
-                'Authorization': `Bearer ${getToken()}`
             },
         })
             .then(response => response.json())

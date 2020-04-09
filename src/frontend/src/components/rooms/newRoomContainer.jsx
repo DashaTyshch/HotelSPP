@@ -3,7 +3,6 @@ import connect from "react-redux/es/connect/connect";
 import {Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
-import {setUser} from "../../store/actions";
 
 import { getToken } from "../../store/actions";
 const useStyles = makeStyles(theme => ({

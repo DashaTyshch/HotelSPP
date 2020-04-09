@@ -12,6 +12,9 @@ import java.util.List;
 @RequestMapping("/api/room_type")
 public interface RoomTypeController {
 
+    @GetMapping("/get")
+    ResponseEntity<RoomType> getRoomType(@RequestParam String name);
+
     @GetMapping("/all")
     ResponseEntity<List<RoomType>> getAllRoomTypes();
 

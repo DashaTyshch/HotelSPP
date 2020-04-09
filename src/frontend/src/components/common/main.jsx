@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Switch, Route } from 'react-router-dom';
 
 import Container from "@material-ui/core/Container/Container";
@@ -6,6 +6,7 @@ import RoomsContainer from "../rooms/roomsContainer.jsx";
 import NewRoomContainer from "../rooms/newRoomContainer.jsx";
 import connect from "react-redux/es/connect/connect";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import RoomTypeContainer from "../rooms/roomTypeContainer.jsx";
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -17,15 +18,14 @@ const useStyles = makeStyles(theme => ({
 
 function Main(props) {
 
-
     return (
         <>
             <Container component="main" className={useStyles().main} maxWidth="sm">
                 <Switch>
                     <Route exact path='/' component={RoomsContainer}/>
+                    <Route path='/roomType/:id' component={RoomTypeContainer}/>
                     <Route path='/newRoom' component={NewRoomContainer}/>
                 </Switch>
-
             </Container>
         </>
     );
