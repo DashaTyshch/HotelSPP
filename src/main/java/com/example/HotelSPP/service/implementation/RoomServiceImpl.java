@@ -1,4 +1,5 @@
 package com.example.HotelSPP.service.implementation;
+import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import com.example.HotelSPP.repository.interfaces.RoomRepository;
 import com.example.HotelSPP.service.interfaces.RoomService;
@@ -22,16 +23,6 @@ public class RoomServiceImpl implements RoomService {
         this.roomRepository = roomRepository;
     }
 
-    int createRoomType(String name, String description, int amount, float price, int places, int discount, List<String> comforts){
-        if(roomRepository.roomTypeAvailable(name)){
-            RoomType rt = new RoomType(0, name,  description,  amount,  price,  places,  discount);
-            roomRepository.addRoomType(rt);
-            return 1;
-        }
-
-        return 0;
-    }
-
     int createComfort(){
         return 0;
     }
@@ -48,24 +39,36 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Boolean addRoomType(RoomTypeRequest roomType)
+    public RoomType addRoomType(RoomTypeRequest roomType)
     {
         if(roomRepository.roomTypeAvailable(roomType.getName())){
             try{
-                roomRepository.addRoomType(RoomType.builder()
+                RoomType result =  roomRepository.addRoomType(RoomType.builder()
                         .name(roomType.getName())
                         .amount(roomType.getAmount())
                         .description(roomType.getDescription())
                         .places(roomType.getPlaces())
                         .price(roomType.getPrice())
                         .build());
+                return result;
             } catch (DuplicateKeyException e) {
-                return false;
+                return null;
             }
         } else
-            return false;
+            return null;
+    }
 
-        return true;
+    @Override
+    public Boolean addImages(int id, List<Image> images)
+    {
+        try{
+            for (Image image: images) {
+                roomRepository.addImage(id, image);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

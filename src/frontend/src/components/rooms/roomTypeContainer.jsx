@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import {getToken} from "../../store/actions";
 
 export default function RoomTypeContainer(props) {
     let { id } = useParams();
@@ -26,7 +25,7 @@ export default function RoomTypeContainer(props) {
     return (
         <>
             {roomType !== null &&
-                roomType.name
+                <></>
             }
         </>
     );

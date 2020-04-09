@@ -1,7 +1,10 @@
 
 package com.example.HotelSPP.repository.implementation;
 
-import java.sql.Types;
+import java.sql.*;
+
+import com.example.HotelSPP.entity.Image;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.exceptions.ResourceNotFoundException;
@@ -20,8 +23,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 
@@ -63,6 +64,18 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Value("${sql.select.room_types}")
     private String GET_ALL_ROOM_TYPES;
 
+    @Value("${image.id}")
+    private String paramImageId;
+    @Value("${image.img}")
+    private String paramImageImg;
+    @Value("${image.room_id}")
+    private String paramImageRoomId;
+
+    @Value("${sql.insert.image}")
+    private String ADD_IMAGE;
+    @Value("${sql.select.imageById}")
+    private String GET_IMAGE_BY_ID;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -92,6 +105,28 @@ public class RoomRepositoryImpl implements RoomRepository {
         Optional<RoomType> createdRoomType = findRoomTypeByName(roomType.getName());
         return createdRoomType.orElseThrow(
                 () -> new ResourceNotFoundException("RoomType", "name", roomType.getName()));
+    }
+
+    @Override
+    public Image addImage(int id, Image image) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        try {
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(ADD_IMAGE, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, image.getImage());
+                ps.setInt(2, id);
+                return ps;
+            }, keyHolder);
+        } catch (DataAccessException e) {
+            throw e;
+        }
+
+        int imgId = (Integer) keyHolder.getKeys().get(paramImageId);
+        Optional<Image> imgOptional = findImageById(imgId);
+        if(!imgOptional.isPresent())
+            throw new ResourceNotFoundException("Image", "id", image.getId());
+        return imgOptional.get();
     }
 
     @Override
@@ -230,10 +265,25 @@ public class RoomRepositoryImpl implements RoomRepository {
         }
     }
 
+    @Override
+    public Optional<Image> findImageById(int id) {
+        Image res;
+        try {
+            res = namedTemplate.queryForObject(GET_IMAGE_BY_ID, new MapSqlParameterSource(
+                    paramImageId, id), new ImageMapper());
+        } catch (EmptyResultDataAccessException e) {
+            log.warn(String.format("Couldn't find image by id: %s", id));
+            res = null;
+        } catch (DataAccessException e) {
+            log.error("Error: ", e);
+            throw e;
+        }
+        return Optional.ofNullable(res);
+    }
+
     private class RoomTypeMapper implements RowMapper<RoomType> {
         @Override
         public RoomType mapRow(ResultSet rs, int arg1) throws SQLException {
-            log.info("Room type variable: {}", paramRoomTypeName);
             return RoomType.builder()
                     .id(rs.getInt(paramRoomTypeId))
                     .name(rs.getString(paramRoomTypeName))
@@ -242,6 +292,17 @@ public class RoomRepositoryImpl implements RoomRepository {
                     .price(rs.getFloat(paramRoomTypePrice))
                     .places(rs.getInt(paramRoomTypePlaces))
                     .discount(rs.getInt(paramRoomTypeDiscount))
+                    .build();
+        }
+    }
+
+    private class ImageMapper implements RowMapper<Image> {
+        @Override
+        public Image mapRow(ResultSet rs, int arg1) throws SQLException {
+            return Image.builder()
+                    .id(rs.getInt(paramImageId))
+                    .image(rs.getString(paramImageImg))
+                    .room_Type_Id(rs.getInt(paramImageRoomId))
                     .build();
         }
     }

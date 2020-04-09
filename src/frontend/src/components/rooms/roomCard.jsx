@@ -75,10 +75,6 @@ const useStyles = makeStyles(theme => ({
 export default function RoomCards(props) {
     const classes = useStyles();
 
-    const roomAction = (name) => {
-        window.location.href = `/roomType/${name}`;
-    };
-
     return (
         <>
             <div className={classes.gridList}>

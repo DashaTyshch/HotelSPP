@@ -1,6 +1,7 @@
 package com.example.HotelSPP.controller.implementation;
 
 import com.example.HotelSPP.controller.interfaces.RoomTypeController;
+import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import com.example.HotelSPP.service.interfaces.RoomService;
@@ -31,10 +32,12 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     }
 
     @Override
-    public ResponseEntity<String> postRoomType(RoomTypeRequest roomType) {
-        if (!service.addRoomType(roomType))
+    public ResponseEntity<String> postRoomType(RoomTypeRequest roomType, List<Image> images) {
+        RoomType r = service.addRoomType(roomType);
+        if (r == null)
             return new ResponseEntity<>("Such room type already exists!",
                     HttpStatus.CONFLICT);
+        service.addImages(r.getId(), images);
         return ResponseEntity.ok("Room type created successfully!");
     }
 
