@@ -49,7 +49,6 @@ const useStyles = makeStyles(theme => ({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         height: "300px",
-
     },
     gridList : {
         height: "auto",

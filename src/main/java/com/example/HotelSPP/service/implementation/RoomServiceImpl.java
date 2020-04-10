@@ -59,10 +59,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Boolean addImages(int id, List<Image> images)
+    public Boolean addImages(int id, List<String> images)
     {
         try{
-            for (Image image: images) {
+            for (String image: images) {
                 roomRepository.addImage(id, image);
             }
             return true;

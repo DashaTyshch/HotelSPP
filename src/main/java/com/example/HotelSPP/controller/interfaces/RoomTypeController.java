@@ -1,6 +1,5 @@
 package com.example.HotelSPP.controller.interfaces;
 
-import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,6 @@ public interface RoomTypeController {
     ResponseEntity<List<RoomType>> getAllRoomTypes();
 
     @PostMapping("/create")
-    ResponseEntity<String> postRoomType(@RequestBody RoomTypeRequest roomType, List<Image> images);
+    ResponseEntity<String> postRoomType(@RequestBody RoomTypeRequest roomType);
 
 }

@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import connect from "react-redux/es/connect/connect";
 import {Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
+import {useDropzone} from 'react-dropzone';
 
 import { getToken } from "../../store/actions";
+import styled from 'styled-components';
+import Paper from "@material-ui/core/Paper";
+import Carousel from "react-material-ui-carousel";
+
 const useStyles = makeStyles(theme => ({
     form: {
         margin: '0 auto',
@@ -40,15 +45,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const Image = styled.img`
+    object-fit: cover;
+    width: 100%;
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    max-height: 300px;
+`;
+
 function NewRoomContainer(props) {
     const [roomType, setRoomType] = useState("");
     const [description, setDescription] = useState("");
     const [places, setPlaces] = useState(1);
     const [price, setPrice] = useState(0);
     const [amount, setAmount] = useState(1);
+    const [images, setImages] = useState([]);
 
     const handleSubmit = e => {
         e.preventDefault();
+
         fetch("/api/room_type/create", {
             method: "POST",
             headers: {
@@ -56,7 +73,7 @@ function NewRoomContainer(props) {
                 Accept: 'application/json',
                 'Authorization': `Bearer ${getToken()}`
             },
-            body: JSON.stringify({name: roomType, description, places, price, amount})
+            body: JSON.stringify({name: roomType, description, places, price, amount, images})
         })
             .then(response => response.text())
             .then(data => {
@@ -67,6 +84,21 @@ function NewRoomContainer(props) {
                 console.log("fetch error" + err);
             });
     };
+
+    const onDrop = useCallback(acceptedFiles => {
+        acceptedFiles.forEach((file) => {
+            const reader = new FileReader();
+
+            reader.onabort = () => console.log('file reading was aborted');
+            reader.onerror = () => console.log('file reading has failed');
+            reader.onload = () => {
+                const result = reader.result;
+                setImages([...images, result]);
+            };
+            reader.readAsDataURL(file);
+        })
+    }, [images]);
+    const {getRootProps, getInputProps} = useDropzone({onDrop});
 
     return (
         <>
@@ -83,6 +115,24 @@ function NewRoomContainer(props) {
                                    value={roomType}
                                    onChange={(e) => setRoomType(e.target.value)}
                         />
+
+                        <div {...getRootProps()} onDrop={onDrop}>
+                            <input {...getInputProps()} />
+
+                            {images.length > 0 &&
+                                <Carousel interval={9000}>
+                                    {images.map((image) =>{
+                                        return <>
+                                            <Paper>
+                                                <Image src={image} alt=""/>
+                                            </Paper>
+                                        </>
+                                    })}
+                                </Carousel>
+                            }
+
+                            <p>Перетягніть сюди фотографії, щоб завантажити</p>
+                        </div>
 
                         <div className={useStyles().infoBlock}>
                             <div className={useStyles().infoBlockCol}>

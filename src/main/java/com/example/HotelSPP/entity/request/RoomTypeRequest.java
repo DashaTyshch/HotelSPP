@@ -1,6 +1,5 @@
 package com.example.HotelSPP.entity.request;
 
-import com.example.HotelSPP.entity.Image;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,4 +16,5 @@ public class RoomTypeRequest {
     private @NotNull int amount;
     private @NotNull float price;
     private @NotNull int places;
+    private List<String> images;
 }

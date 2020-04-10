@@ -108,13 +108,13 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Image addImage(int id, Image image) {
+    public Image addImage(int id, String image) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         try {
             jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(ADD_IMAGE, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, image.getImage());
+                ps.setString(1, image);
                 ps.setInt(2, id);
                 return ps;
             }, keyHolder);
@@ -125,7 +125,7 @@ public class RoomRepositoryImpl implements RoomRepository {
         int imgId = (Integer) keyHolder.getKeys().get(paramImageId);
         Optional<Image> imgOptional = findImageById(imgId);
         if(!imgOptional.isPresent())
-            throw new ResourceNotFoundException("Image", "id", image.getId());
+            throw new ResourceNotFoundException("Image", "image", image);
         return imgOptional.get();
     }
 

@@ -1,6 +1,5 @@
 package com.example.HotelSPP.service.interfaces;
 
-import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 
@@ -10,6 +9,6 @@ public interface RoomService {
     RoomType getRoomType(String name);
     int updateRoomType(RoomType rt);
     RoomType addRoomType (RoomTypeRequest roomType);
-    Boolean addImages (int id, List<Image> images);
+    Boolean addImages (int id, List<String> images);
     List<RoomType> getAllRoomTypes ();
 }
