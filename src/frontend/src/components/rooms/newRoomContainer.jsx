@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import connect from "react-redux/es/connect/connect";
+import { withRouter } from "react-router";
 import {Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
@@ -214,4 +215,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewRoomContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewRoomContainer));

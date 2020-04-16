@@ -1,5 +1,6 @@
 package com.example.HotelSPP.configuration;
 
+import com.example.HotelSPP.entity.UserRole;
 import com.example.HotelSPP.security.AuthenticationFilter;
 import com.example.HotelSPP.security.CustomUserDetailsService;
 import com.example.HotelSPP.security.JwtAuthenticationEntryPoint;
@@ -87,13 +88,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/api/room_type/get",
                         "/api/auth/verifyRestoreToken",
                         "/api/auth/verifyActivationToken",
-                        "/api/auth/restorePassword",
-                        "/restore-password",
-                        "/change-password/*",
-                        "/account-verification/*"
+                        "/api/auth/restorePassword"
                 )
                 .permitAll()
-                .antMatchers("/chat-messaging/**").permitAll()
+                .antMatchers("/newRoom").hasAuthority("HEAD")
                 .anyRequest()
                 .authenticated();
 

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { connect } from 'react-redux';
-
+import { withRouter } from "react-router";
 import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
@@ -121,4 +121,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginModal));

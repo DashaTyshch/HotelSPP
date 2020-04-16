@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { withRouter } from "react-router";
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -29,12 +29,7 @@ const Header = props => {
                 </Typography>
                 {props.user == null ?
                     <Button color="inherit" onClick={() => props.onSetLoginOpen(true)}>Ввійти</Button>
-                    : <>
-                        <Link to='/newRoom'>
-                            <Button color="inherit">+ номер</Button>
-                        </Link>
-                        <Button color="inherit" onClick={props.logOut}>Вийти</Button>
-                    </>
+                    : <Button color="inherit" onClick={props.logOut}>Вийти</Button>
                 }
             </Toolbar>
         </AppBar>
@@ -53,4 +48,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

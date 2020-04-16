@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container } from 'react-bootstrap';
 import RoomCards from "./roomCard.jsx";
 import RoomsMenu from './RoomsMenu.jsx';
 import connect from "react-redux/es/connect/connect";

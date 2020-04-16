@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route } from 'react-router-dom';
+import { withRouter } from "react-router";
 
 import { Container } from 'react-bootstrap';
 import RoomsContainer from "../rooms/roomsContainer.jsx";
@@ -40,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

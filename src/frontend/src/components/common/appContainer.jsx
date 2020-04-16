@@ -1,4 +1,5 @@
 import React, {useEffect} from "react";
+import { withRouter } from "react-router";
 
 import {makeStyles} from '@material-ui/core/styles';
 import Header from "./header.jsx";
@@ -45,4 +46,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppContainer));

@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
+import connect from "react-redux/es/connect/connect";
+import {userRole} from '../../constants/enums';
 import { Row,  Col } from 'react-bootstrap';
-import { FormControl, InputLabel, Select, MenuItem} from '@material-ui/core';
+import {FormControl, InputLabel, Select, MenuItem, Button} from '@material-ui/core';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
-export default function RoomsMenu(props) {
+const useStyles = makeStyles(theme => ({
+    btn: {
+        backgroundColor: theme.palette.blue.backgroundColor,
+        color: theme.palette.blue.color,
+        '&:hover': {
+            backgroundColor: theme.palette.lightBlue.backgroundColor,
+            color: theme.palette.blue.color
+        },
+    },
+}));
+
+function RoomsMenu(props) {
+    const style = useStyles();
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [places, setPlaces] = useState(1);
     const [dates, setDates] = useState([new Date(), new Date()]);
@@ -15,8 +30,11 @@ export default function RoomsMenu(props) {
 
     return (
         <>
-            <Row className="align-items-center">
-                <Col xs={12} md={4} onClick={() => setShowDatePicker(true)}>
+            <Row className="justify-content-center">
+                { props.user !== null && props.user.role == userRole.HEAD &&
+                    <Button onClick={() => window.location.href = '#/newRoom'} className={style.btn}>Додати тип номеру</Button>
+                }
+                <Col xs={8} md={4} onClick={() => setShowDatePicker(true)} className='align-self-center text-center'>
                     <DateRangePicker
                         isOpen={showDatePicker}
                         minDate={new Date()}
@@ -25,7 +43,7 @@ export default function RoomsMenu(props) {
                         format={'dd.MM.y'}
                     />
                 </Col>
-                <Col md={4}>
+                <Col xs={8} md={3} className='align-self-center'>
                     <FormControl fullWidth>
                         <InputLabel id="places-filter">Виберіть кількість гостей</InputLabel>
                         <Select
@@ -46,3 +64,16 @@ export default function RoomsMenu(props) {
         </>
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomsMenu);
