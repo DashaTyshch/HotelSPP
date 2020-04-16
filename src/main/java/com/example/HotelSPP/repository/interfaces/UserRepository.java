@@ -11,4 +11,6 @@ public interface UserRepository {
     Optional<User> findUserById(Long id);
     Optional<User> findUserByEmail(String searchStr);
     Optional<User> findUserByPhone(String phone);
+
+    boolean isSignedUp(String searchStr);
 }

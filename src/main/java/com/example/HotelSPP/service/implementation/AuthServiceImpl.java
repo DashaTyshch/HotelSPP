@@ -1,6 +1,9 @@
 package com.example.HotelSPP.service.implementation;
 
+import com.example.HotelSPP.entity.User;
+import com.example.HotelSPP.entity.UserRole;
 import com.example.HotelSPP.entity.request.LoginRequest;
+import com.example.HotelSPP.entity.request.RegisterRequest;
 import com.example.HotelSPP.exceptions.LoginException;
 import com.example.HotelSPP.repository.interfaces.UserRepository;
 import com.example.HotelSPP.security.JwtTokenProvider;
@@ -52,5 +55,24 @@ public class AuthServiceImpl implements AuthService {
             log.error(ex.getMessage());
             throw new LoginException("Login or password was incorrect !");
         }
+    }
+
+    @Override
+    public boolean registerUser(RegisterRequest registerRequest, String link) {
+        if (userRepository.isSignedUp(registerRequest.getEmail())
+                || userRepository.isSignedUp(registerRequest.getPhone())) {
+            return false;
+        }
+        User toRegister = User.builder()
+                .phone(registerRequest.getPhone())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .name(registerRequest.getName())
+                .surname(registerRequest.getSurname())
+                .role(UserRole.getRoleById(registerRequest.getRole()))
+                .build();
+
+        userRepository.addUser(toRegister);
+        return true;
     }
 }
