@@ -125,6 +125,26 @@ public class UserRepositoryImpl implements UserRepository {
         return Optional.ofNullable(res);
     }
 
+    @Override
+    public boolean isSignedUp(String searchStr) {
+        return findByPhone(searchStr).isPresent();
+    }
+
+    public Optional<User> findByPhone(String phone) {
+        User res = null;
+        try {
+            res = namedTemplate.queryForObject(GET_USER_BY_PHONE, new MapSqlParameterSource(
+                    paramUserSearchStr, phone), new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            log.warn(String.format("Couldn't find user by email or nickname: %s", phone));
+            res = null;
+        } catch (DataAccessException e) {
+            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by nickname or email !");
+            log.error(e.getMessage());
+        }
+        return Optional.ofNullable(res);
+    }
+
 
     private class UserMapper implements RowMapper<User> {
         @Override
