@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from 'react-router-dom';
 
-import Container from "@material-ui/core/Container/Container";
+import { Container } from 'react-bootstrap';
 import RoomsContainer from "../rooms/roomsContainer.jsx";
 import NewRoomContainer from "../rooms/newRoomContainer.jsx";
 import connect from "react-redux/es/connect/connect";
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     main: {
         marginTop: theme.spacing(8),
         marginBottom: theme.spacing(2),
-        maxWidth: '100%'
+        maxWidth: '96%'
     },
 }));
 
@@ -20,7 +20,7 @@ function Main(props) {
 
     return (
         <>
-            <Container component="main" className={useStyles().main} maxWidth="sm">
+            <Container className={useStyles().main}>
                 <Switch>
                     <Route exact path='/' component={RoomsContainer}/>
                     <Route path='/roomType/:id' component={RoomTypeContainer}/>

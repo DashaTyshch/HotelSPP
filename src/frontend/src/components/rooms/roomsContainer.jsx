@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Container } from 'react-bootstrap';
 import RoomCards from "./roomCard.jsx";
+import RoomsMenu from './RoomsMenu.jsx';
 import connect from "react-redux/es/connect/connect";
-import {getToken} from "../../store/actions";
 
 function RoomsContainer(props) {
     const [rooms, setRooms] = useState(null);
+    const [filteredRooms, setFilteredRooms] = useState(null);
 
     useEffect( () => {
         fetch("/api/room_type/all", {
@@ -17,6 +19,7 @@ function RoomsContainer(props) {
             .then(response => response.json())
             .then(data => {
                 setRooms(data);
+                setFilteredRooms(data);
             })
             .catch(err => {
                 console.log("fetch error" + err);
@@ -26,8 +29,9 @@ function RoomsContainer(props) {
 
     return (
         <>
-            {rooms !== null &&
-                <RoomCards rooms={rooms}/>
+            <RoomsMenu />
+            {filteredRooms !== null &&
+                <RoomCards rooms={filteredRooms}/>
             }
         </>
     );
