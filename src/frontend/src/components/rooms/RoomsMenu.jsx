@@ -8,6 +8,11 @@ export default function RoomsMenu(props) {
     const [places, setPlaces] = useState(1);
     const [dates, setDates] = useState([new Date(), new Date()]);
 
+    const handleSetPlaces = (value) => {
+        setPlaces(value);
+        props.filterByPlaces(value);
+    };
+
     return (
         <>
             <Row className="align-items-center">
@@ -28,7 +33,7 @@ export default function RoomsMenu(props) {
                             labelId="places-filter"
                             id="filter-places"
                             value={places}
-                            onChange={(e) => setPlaces(e.target.value)}
+                            onChange={(e) => handleSetPlaces(e.target.value)}
                         >
                             <MenuItem value={1}>1</MenuItem>
                             <MenuItem value={2}>2</MenuItem>

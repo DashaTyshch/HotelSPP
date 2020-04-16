@@ -27,9 +27,13 @@ function RoomsContainer(props) {
 
     }, []);
 
+    const filterByPlaces = (places) => {
+        setFilteredRooms(rooms.filter(room => room.places >= places));
+    };
+
     return (
         <>
-            <RoomsMenu />
+            <RoomsMenu filterByPlaces={filterByPlaces}/>
             {filteredRooms !== null &&
                 <RoomCards rooms={filteredRooms}/>
             }
