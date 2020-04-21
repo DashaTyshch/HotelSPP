@@ -34,7 +34,7 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     public ResponseEntity<String> postRoomType(RoomTypeRequest roomType) {
         RoomType r = service.addRoomType(roomType);
         if (r == null)
-            return new ResponseEntity<>("Such room type already exists!",
+            return new ResponseEntity<>("Такий тип номеру вже створений.",
                     HttpStatus.CONFLICT);
         service.addImages(r.getId(), roomType.getImages());
         return ResponseEntity.ok("Room type created successfully!");

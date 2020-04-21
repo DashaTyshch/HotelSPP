@@ -1,54 +1,12 @@
 import React, {useState} from "react";
-import { connect } from 'react-redux';
-import { withRouter } from "react-router";
-import {Dialog, DialogTitle, Button, TextField} from "@material-ui/core";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
+import {Button, TextField} from "@material-ui/core";
+import {userLoginFetch} from "../../../store/actions";
+import {withRouter} from "react-router";
+import {connect} from "react-redux";
+import {useStyles} from "./authStyles";
 
-import {setLoginOpen, userLoginFetch} from "../../store/actions";
-
-const useStyles = makeStyles(theme => ({
-    paper: {
-        margin: theme.spacing(0, 0, 3, 0),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    title: {
-        textAlign: "center",
-        color: theme.palette.turquoise.backgroundColor,
-        letterSpacing: "0.009em",
-        fontWeight: "bold",
-    },
-    form: {
-        width: '80%',
-        '& label.Mui-focused': {
-            color: theme.palette.turquoise.backgroundColor,
-        },
-        '& .MuiInput-underline:after': {
-            borderBottomColor: theme.palette.turquoise.backgroundColor,
-        },
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        backgroundColor: theme.palette.lightBlue.backgroundColor,
-        color: theme.palette.lightBlue.color,
-        '&:hover': {
-            backgroundColor: theme.palette.blue.backgroundColor,
-            color: theme.palette.blue.color
-        },
-    },
-    signUp: {
-        textAlign: "center",
-        '& span:hover': {
-            color: theme.palette.beige.backgroundColor,
-            textDecoration: "underline",
-            cursor: "pointer"
-        },
-    }
-}));
-
-function LoginModal(props) {
+function Login(props){
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
 
@@ -57,9 +15,8 @@ function LoginModal(props) {
         props.userLoginFetch(phone, password);
     };
 
-    return(
-        <Dialog onClose={() => props.onSetLoginOpen(false)}  open={props.open}>
-            <DialogTitle className={useStyles().title}>HotelSPP</DialogTitle>
+    return (
+        <>
             <Typography variant="body1" align="center">
                 Ввійдіть у систему
             </Typography>
@@ -101,24 +58,22 @@ function LoginModal(props) {
                     </Button>
                     <div className={useStyles().signUp}>
                         {'Ще не створили акаунт? '}
-                        <span>Зареєструватися</span>
+                        <span onClick={props.goToSignUp}>Зареєструватися</span>
                     </div>
                 </form>
             </div>
-        </Dialog>
-    );
+        </>
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
-        open: state.loginOpen,
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSetLoginOpen: (isOpen) => dispatch(setLoginOpen(isOpen)),
         userLoginFetch: (phone, pwd) => dispatch(userLoginFetch(phone, pwd))
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginModal));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

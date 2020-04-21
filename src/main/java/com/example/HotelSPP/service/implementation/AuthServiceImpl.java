@@ -11,7 +11,6 @@ import com.example.HotelSPP.service.interfaces.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -48,17 +47,15 @@ public class AuthServiceImpl implements AuthService {
                             loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return tokenProvider.generateToken(authentication);
-        }// catch (LockedException ex) {
-           // throw new LockedException("Account is not verified by email ! Please check your mail !");
-        //}
+        }
         catch (AuthenticationException ex) {
             log.error(ex.getMessage());
-            throw new LoginException("Login or password was incorrect !");
+            throw new LoginException("Логін або пароль неправильні. Перевірте дані, будь ласка.");
         }
     }
 
     @Override
-    public boolean registerUser(RegisterRequest registerRequest, String link) {
+    public boolean registerUser(RegisterRequest registerRequest) {
         if (userRepository.isSignedUp(registerRequest.getEmail())
                 || userRepository.isSignedUp(registerRequest.getPhone())) {
             return false;
@@ -69,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .name(registerRequest.getName())
                 .surname(registerRequest.getSurname())
-                .role(UserRole.getRoleById(registerRequest.getRole()))
+                .role(UserRole.USER)
                 .build();
 
         userRepository.addUser(toRegister);

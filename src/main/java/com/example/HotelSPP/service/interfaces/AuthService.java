@@ -8,7 +8,6 @@ public interface AuthService {
     Boolean isUserPhoneUnique(String phone);
     String authenticateUser(LoginRequest loginRequest);
 
-    boolean registerUser(RegisterRequest signUpRequest, String link);
-    //boolean registerUser(RegisterRequest registerRequest);
+    boolean registerUser(RegisterRequest signUpRequest);
 
 }

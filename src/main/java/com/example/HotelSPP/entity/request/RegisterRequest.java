@@ -12,10 +12,13 @@ import javax.validation.constraints.NotNull;
 public class RegisterRequest {
     @NotNull
     private String phone;
+    @NotNull
     private String name;
+    @NotNull
     private String surname;
     @NotNull
     private String password;
+    @NotNull
     private String email;
     private int role;
 }

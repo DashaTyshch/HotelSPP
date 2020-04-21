@@ -65,6 +65,28 @@ export const userLoginFetch = (phone, pwd) => {
     }
 };
 
+export const userSignUpFetch = (model) => {
+    return dispatch => {
+        return fetch("/api/auth/signUp", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify(model)
+        })
+            .then(response => response.text())
+            .then(data => {
+                localStorage.setItem("token", data);
+                location.reload();
+            })
+
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+    }
+};
+
 
 export const logOut = () => {
     return () => {

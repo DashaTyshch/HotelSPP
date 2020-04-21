@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -29,14 +28,16 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
-    public ResponseEntity<String> registerUser(HttpServletRequest httpServletRequest, @Valid RegisterRequest signUpRequest) {
-        String url = String.valueOf(httpServletRequest.getRequestURL());
-        String link = url.replace(httpServletRequest.getRequestURI(), "");
-        boolean success = authService.registerUser(signUpRequest, link);
+    public ResponseEntity<String> registerUser(@Valid RegisterRequest signUpRequest) {
+        boolean success = authService.registerUser(signUpRequest);
         if (success) {
-            return new ResponseEntity<>("New user was created.", HttpStatus.CREATED);
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.setLogin(signUpRequest.getPhone());
+            loginRequest.setPassword(signUpRequest.getPassword());
+            return authenticateUser(loginRequest);
+            //return new ResponseEntity<>("New user was created.", HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("User with such phone number already exists!",
+        return new ResponseEntity<>("Користувач з таким номером або поштою вже зареєстрований.",
                 HttpStatus.CONFLICT);
     }
 

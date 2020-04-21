@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import {makeStyles} from '@material-ui/core/styles';
 import Header from "./header.jsx";
-import LoginModal from "./loginModal.jsx";
+import LoginModal from "./auth/authModal.jsx";
 import {Footer} from "./footer.jsx";
 import {fetchUserInfo} from "../../store/actions";
 import {connect} from "react-redux";

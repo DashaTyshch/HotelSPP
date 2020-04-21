@@ -17,7 +17,6 @@ public interface AuthController {
     ResponseEntity<String> authenticateUser(@Valid @RequestBody LoginRequest loginRequest);
 
     @PostMapping("/signUp")
-    ResponseEntity<String> registerUser(HttpServletRequest httpServletRequest,
-                                        @Valid @RequestBody RegisterRequest signUpRequest);
+    ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequest signUpRequest);
 
 }
