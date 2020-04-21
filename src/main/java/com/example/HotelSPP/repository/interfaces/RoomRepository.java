@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface RoomRepository {
     boolean roomTypeAvailable(String name);
     RoomType addRoomType(RoomType roomType);
-    Image addImage(int id, String image);
+    void addImage(int id, String image);
 
     Optional<RoomType> findRoomTypeById(long id);
     Optional<RoomType> findRoomTypeByName(String name);
@@ -19,5 +19,5 @@ public interface RoomRepository {
 
     List<RoomType> getAllRoomTypes();
 
-    Optional<Image> findImageById(int id);
+    List<Image> findImagesById(int id);
 }

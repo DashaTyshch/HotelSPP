@@ -1,6 +1,7 @@
 package com.example.HotelSPP.service.implementation;
 import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
+import com.example.HotelSPP.entity.response.RoomTypeResponse;
 import com.example.HotelSPP.repository.interfaces.RoomRepository;
 import com.example.HotelSPP.service.interfaces.RoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,7 @@ import com.example.HotelSPP.entity.RoomType;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,20 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomType getRoomType(String name) {
-        return roomRepository.findRoomTypeByName(name).orElse(null);
+    public RoomTypeResponse getRoomType(String name) {
+        RoomType roomType = roomRepository.findRoomTypeByName(name).orElse(null);
+        if(roomType == null)
+            return null;
+        List<Image> images = roomRepository.findImagesById(roomType.getId());
+        RoomTypeResponse result =  RoomTypeResponse.builder()
+                .name(roomType.getName())
+                .amount(roomType.getAmount())
+                .description(roomType.getDescription())
+                .places(roomType.getPlaces())
+                .price(roomType.getPrice())
+                .images(images)
+                .build();
+        return result;
     }
 
     @Override
@@ -72,7 +85,24 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomType> getAllRoomTypes() {
-        return roomRepository.getAllRoomTypes();
+    public List<RoomTypeResponse> getAllRoomTypes() {
+        List<RoomType> roomTypes = roomRepository.getAllRoomTypes();
+        if(roomTypes.isEmpty())
+            return null;
+
+        List<RoomTypeResponse> result = new ArrayList<>();
+        for (RoomType roomType :
+                roomTypes) {
+            List<Image> images = roomRepository.findImagesById(roomType.getId());
+            result.add(RoomTypeResponse.builder()
+                    .name(roomType.getName())
+                    .amount(roomType.getAmount())
+                    .description(roomType.getDescription())
+                    .places(roomType.getPlaces())
+                    .price(roomType.getPrice())
+                    .images(images)
+                    .build());
+        }
+        return result;
     }
 }

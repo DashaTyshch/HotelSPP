@@ -61,6 +61,7 @@ const useStyles = makeStyles(theme => ({
         margin: "30px",
     },
     type: {
+        color: theme.palette.primary.main,
         letterSpacing: "0.07em",
     },
     price: {
@@ -78,38 +79,36 @@ export default function RoomCards(props) {
         <>
             <div className={classes.gridList}>
                 {props.rooms.map((room) => {
-                    return <Link to={`/roomType/${room.name}`}><div key={room.name} className={classes.gridListTile} >
+                    return <div key={room.name} className={classes.gridListTile} >
                         <div className={classes.root}>
                             <button className={classes.actionButton}>
                                 <Carousel interval={9000}>
-                                    <Paper>
-                                        <img src={"../img/img26.jpg"} alt={room.name} className={classes.img}/>
-                                    </Paper>
-                                    <Paper>
-                                        <img src={"../img/img27.jpg"} alt={room.name} className={classes.img}/>
-                                    </Paper>
-                                    <Paper>
-                                        <img src={"../img/img25.jpg"} alt={room.name} className={classes.img}/>
-                                    </Paper>
+                                    {room.images.map(img => {
+                                        return <Link to={`/roomType/${room.name}`}><Paper>
+                                                    <img src={img.image} alt={room.name} className={classes.img}/>
+                                                </Paper></Link>
+                                    })}
                                 </Carousel>
-                                <div style={{padding: "16px", textAlign: "center"}}>
-                                    <h2 className={classes.type}>
-                                        {room.name}
-                                    </h2>
-                                    <h2 className={classes.price}>
-                                        UAH {room.price}
-                                    </h2>
-                                    <Divider light />
-                                    <h3 className={classes.info}>
-                                        Спальних місць: {room.places}
-                                    </h3>
-                                    <h3 className={classes.info}>
-                                        К-ть вільних: 3
-                                    </h3>
-                                </div>
+                                <Link to={`/roomType/${room.name}`}>
+                                    <div style={{padding: "16px", textAlign: "center"}}>
+                                        <h2 className={classes.type}>
+                                            {room.name}
+                                        </h2>
+                                        <h2 className={classes.price}>
+                                            UAH {room.price}
+                                        </h2>
+                                        <Divider light />
+                                        <h3 className={classes.info}>
+                                            Спальних місць: {room.places}
+                                        </h3>
+                                        <h3 className={classes.info}>
+                                            К-ть вільних: 3
+                                        </h3>
+                                    </div>
+                                </Link>
                             </button>
                         </div>
-                    </div></Link>
+                    </div>
                 })}
             </div>
 

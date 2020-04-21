@@ -73,8 +73,8 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Value("${sql.insert.image}")
     private String ADD_IMAGE;
-    @Value("${sql.select.imageById}")
-    private String GET_IMAGE_BY_ID;
+    @Value("${sql.select.imageByRoomId}")
+    private String GET_IMAGE_BY_ROOM_ID;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -96,11 +96,7 @@ public class RoomRepositoryImpl implements RoomRepository {
         paramMap.put(paramRoomTypePrice, roomType.getPrice());
         paramMap.put(paramRoomTypePlaces, roomType.getPlaces());
         paramMap.put(paramRoomTypeDiscount, 0);
-        try {
-            namedTemplate.update(ADD_ROOM_TYPE, paramMap);
-        } catch (DataAccessException e) {
-            //throw RepositoryUtils.toDatabaseException(e, "Sorry, service can't create room type now !");
-        }
+        namedTemplate.update(ADD_ROOM_TYPE, paramMap);
 
         Optional<RoomType> createdRoomType = findRoomTypeByName(roomType.getName());
         return createdRoomType.orElseThrow(
@@ -108,25 +104,11 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Image addImage(int id, String image) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        try {
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(ADD_IMAGE, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, image);
-                ps.setInt(2, id);
-                return ps;
-            }, keyHolder);
-        } catch (DataAccessException e) {
-            throw e;
-        }
-
-        int imgId = (Integer) keyHolder.getKeys().get(paramImageId);
-        Optional<Image> imgOptional = findImageById(imgId);
-        if(!imgOptional.isPresent())
-            throw new ResourceNotFoundException("Image", "image", image);
-        return imgOptional.get();
+    public void addImage(int id, String image) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put(paramImageImg, image);
+        paramMap.put(paramImageRoomId, id);
+        namedTemplate.update(ADD_IMAGE, paramMap);
     }
 
     @Override
@@ -266,19 +248,14 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Optional<Image> findImageById(int id) {
-        Image res;
+    public List<Image> findImagesById(int id) {
         try {
-            res = namedTemplate.queryForObject(GET_IMAGE_BY_ID, new MapSqlParameterSource(
-                    paramImageId, id), new ImageMapper());
-        } catch (EmptyResultDataAccessException e) {
-            log.warn(String.format("Couldn't find image by id: %s", id));
-            res = null;
+            return Collections.unmodifiableList(namedTemplate.query(GET_IMAGE_BY_ROOM_ID,
+                    new MapSqlParameterSource(paramImageRoomId, id), new ImageMapper()));
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
         }
-        return Optional.ofNullable(res);
     }
 
     private class RoomTypeMapper implements RowMapper<RoomType> {

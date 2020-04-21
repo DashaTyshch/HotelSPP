@@ -3,6 +3,7 @@ package com.example.HotelSPP.controller.implementation;
 import com.example.HotelSPP.controller.interfaces.RoomTypeController;
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
+import com.example.HotelSPP.entity.response.RoomTypeResponse;
 import com.example.HotelSPP.service.interfaces.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +22,23 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     private RoomService service;
 
     @Override
-    public ResponseEntity<RoomType> getRoomType(String name) {
+    public ResponseEntity<RoomTypeResponse> getRoomType(String name) {
         return ResponseEntity.ok(service.getRoomType(name));
     }
 
     @Override
-    public ResponseEntity<List<RoomType>> getAllRoomTypes() {
+    public ResponseEntity<List<RoomTypeResponse>> getAllRoomTypes() {
         return ResponseEntity.ok(service.getAllRoomTypes());
     }
 
     @Override
     public ResponseEntity<String> postRoomType(RoomTypeRequest roomType) {
-        RoomType r = service.addRoomType(roomType);
-        if (r == null)
+        RoomType rt = service.addRoomType(roomType);
+        if (rt == null)
             return new ResponseEntity<>("Такий тип номеру вже створений.",
                     HttpStatus.CONFLICT);
-        service.addImages(r.getId(), roomType.getImages());
-        return ResponseEntity.ok("Room type created successfully!");
+        service.addImages(rt.getId(), roomType.getImages());
+        return ResponseEntity.ok(rt.getName());
     }
 
 }

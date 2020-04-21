@@ -2,13 +2,14 @@ package com.example.HotelSPP.service.interfaces;
 
 import com.example.HotelSPP.entity.RoomType;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
+import com.example.HotelSPP.entity.response.RoomTypeResponse;
 
 import java.util.List;
 
 public interface RoomService {
-    RoomType getRoomType(String name);
+    RoomTypeResponse getRoomType(String name);
     int updateRoomType(RoomType rt);
     RoomType addRoomType (RoomTypeRequest roomType);
     Boolean addImages (int id, List<String> images);
-    List<RoomType> getAllRoomTypes ();
+    List<RoomTypeResponse> getAllRoomTypes ();
 }

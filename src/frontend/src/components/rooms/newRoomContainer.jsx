@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
 import connect from "react-redux/es/connect/connect";
 import { withRouter } from "react-router";
-import {Button, TextField} from "@material-ui/core";
+import {Button, TextField, Snackbar} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import {useDropzone} from 'react-dropzone';
+import Alert from '@material-ui/lab/Alert';
 
 import { getToken } from "../../store/actions";
 import styled from 'styled-components';
@@ -56,6 +57,12 @@ const Image = styled.img`
     max-height: 300px;
 `;
 
+const LinkToRoom = styled.span`
+    cursor: pointer;
+    color: #5085A5;
+    font-weight: bold;
+`;
+
 function NewRoomContainer(props) {
     const [roomType, setRoomType] = useState("");
     const [description, setDescription] = useState("");
@@ -63,48 +70,62 @@ function NewRoomContainer(props) {
     const [price, setPrice] = useState(0);
     const [amount, setAmount] = useState(1);
     const [images, setImages] = useState([]);
+    const [message, setMessage] = useState(null);
+
+    const fetchCreateRoom = () => fetch("/api/room_type/create", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({name: roomType, description, places, price, amount, images})
+    }).then(function (res) {
+        if (res.ok) {
+            return res.text();
+        } else {
+            return res.text()
+                .then(function (err) {
+                    throw new Error(err);
+                });
+        }
+    });
+
+    const redirectToRoomPage = (room) => {
+        window.location.href = `#/roomType/${room}`;
+    };
 
     const handleSubmit = e => {
         e.preventDefault();
-
-        fetch("/api/room_type/create", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({name: roomType, description, places, price, amount, images})
-        })
-            .then(response => response.text())
+        fetchCreateRoom()
             .then(data => {
-                alert(data);
+                setMessage({text: data, severity: 'success'});
             })
-
-            .catch(err => {
-                console.log("fetch error" + err);
-            });
+            .catch(err => setMessage({text: err.message, severity: 'error'}));
     };
 
-    const onDrop = useCallback(acceptedFiles => {
-        acceptedFiles.forEach((file) => {
-            const reader = new FileReader();
-
-            reader.onabort = () => console.log('file reading was aborted');
-            reader.onerror = () => console.log('file reading has failed');
+    function readFileAsync(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
             reader.onload = () => {
-                const result = reader.result;
-                setImages([...images, result]);
+                resolve(reader.result);
             };
+            reader.onerror = reject;
             reader.readAsDataURL(file);
         })
+    }
+
+    const onDrop = useCallback(acceptedFiles => {
+        const promises = acceptedFiles.map(readFileAsync);
+        Promise.all(promises)
+            .then(results => setImages([...images, ...results]));
     }, [images]);
     const {getRootProps, getInputProps} = useDropzone({onDrop});
 
     return (
         <>
             <div>
-                <form className={useStyles().form} noValidate autoComplete="off" onSubmit={handleSubmit}>
+                <form className={useStyles().form} autoComplete="off" onSubmit={handleSubmit}>
                     <Grid container justify="center"
                           alignItems="center" direction="column">
                         <TextField size="normal" margin="normal" required
@@ -181,26 +202,36 @@ function NewRoomContainer(props) {
 
                         <div>
                             <Button
-                                //fullWidth
                                 variant="contained"
                                 color="secondary"
-                                className={useStyles().button}
-                            >
+                                className={useStyles().button}>
                                 Скасувати
                             </Button>
 
                             <Button
                                 type="submit"
-                                //fullWidth
                                 variant="contained"
-                                className={`${useStyles().button} ${useStyles().confirmBtn}`}
-                            >
+                                className={`${useStyles().button} ${useStyles().confirmBtn}`}>
                                 Створити
                             </Button>
                         </div>
                     </Grid>
                 </form>
             </div>
+            {message != null &&
+                <Snackbar
+                    open={true}
+                    onClose={() => setMessage(null)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    autoHideDuration={6000}>
+                    <Alert onClose={() => setMessage(null)} severity={message.severity}>
+                        {message.severity === 'error'
+                            ? message.text
+                            :  <><span>Створено! Щоб переглянути номер, натисніть </span><LinkToRoom onClick={()=>redirectToRoomPage(message.text)}>тут</LinkToRoom></>
+                        }
+                    </Alert>
+                </Snackbar>
+            }
         </>
     );
 }
