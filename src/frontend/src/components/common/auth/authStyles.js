@@ -18,17 +18,17 @@ export const useStyles = makeStyles(theme => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        backgroundColor: theme.palette.lightBlue.backgroundColor,
-        color: theme.palette.lightBlue.color,
+        backgroundColor: theme.palette.blue.backgroundColor,
+        color: theme.palette.blue.color,
         '&:hover': {
-            backgroundColor: theme.palette.blue.backgroundColor,
-            color: theme.palette.blue.color
+            backgroundColor: theme.palette.lightBlue.backgroundColor,
+            color: theme.palette.lightBlue.color
         },
     },
     signUp: {
         textAlign: "center",
         '& span:hover': {
-            color: theme.palette.beige.backgroundColor,
+            color: theme.palette.blue.backgroundColor,
             textDecoration: "underline",
             cursor: "pointer"
         },

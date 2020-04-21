@@ -93,17 +93,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findUserByEmail(String searchStr) {
+    public Optional<User> findUserByEmail(String email) {
         User res;
         try {
             res = namedTemplate.queryForObject(GET_USER_BY_EMAIL, new MapSqlParameterSource(
-                    paramUserSearchStr, searchStr), new UserMapper());
+                    paramUserEmail, email), new UserMapper());
         } catch (EmptyResultDataAccessException e) {
-            log.warn(String.format("Couldn't find user by email: %s", searchStr));
+            log.warn(String.format("Couldn't find user by email: %s", email));
             res = null;
         } catch (DataAccessException e) {
             throw e;
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by email !");
         }
         return Optional.ofNullable(res);
     }
@@ -120,31 +119,14 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by phone !");
         }
         return Optional.ofNullable(res);
     }
 
     @Override
-    public boolean isSignedUp(String searchStr) {
-        return findByPhone(searchStr).isPresent();
+    public boolean isSignedUp(String phone, String email) {
+        return findUserByPhone(phone).isPresent() || findUserByEmail(email).isPresent();
     }
-
-    public Optional<User> findByPhone(String phone) {
-        User res = null;
-        try {
-            res = namedTemplate.queryForObject(GET_USER_BY_PHONE, new MapSqlParameterSource(
-                    paramUserSearchStr, phone), new UserMapper());
-        } catch (EmptyResultDataAccessException e) {
-            log.warn(String.format("Couldn't find user by email or nickname: %s", phone));
-            res = null;
-        } catch (DataAccessException e) {
-            //throw RepositoryUtils.toDatabaseException(e, "Couldn't perform search for user by nickname or email !");
-            log.error(e.getMessage());
-        }
-        return Optional.ofNullable(res);
-    }
-
 
     private class UserMapper implements RowMapper<User> {
         @Override

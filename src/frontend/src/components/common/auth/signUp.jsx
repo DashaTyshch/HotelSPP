@@ -1,21 +1,48 @@
 import React, {useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {Button, TextField} from "@material-ui/core";
-import {userSignUpFetch} from "../../../store/actions";
-import {withRouter} from "react-router";
-import {connect} from "react-redux";
 import {useStyles} from "./authStyles";
+import Alert from '@material-ui/lab/Alert';
 
-function SignUp(props){
+export default function SignUp(props){
     const [phone, setPhone] = useState("");
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const fetchSignUp = () => fetch("/api/auth/signUp", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+        body: JSON.stringify({phone, name, surname, password, email})
+    })
+        .then(function (res) {
+            if (res.ok) {
+                return res.text();
+            } else {
+                return res.text()
+                    .then(function (err) {
+                        throw new Error(err);
+                    });
+            }
+        });
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.userSignUpFetch({phone, name, surname, password, email});
+        setError("");
+        fetchSignUp()
+            .then(data => {
+                localStorage.setItem("token", data);
+                location.reload();
+            })
+            .catch(err => {
+                setPassword("");
+                setError(err.message);
+            });
     };
 
     return (
@@ -24,7 +51,7 @@ function SignUp(props){
                 Зареєструйтеся у системі
             </Typography>
             <div className={useStyles().paper}>
-                <form className={useStyles().form} noValidate onSubmit={handleSubmit}>
+                <form className={useStyles().form} onSubmit={handleSubmit} autocomplete="off">
                     <TextField
                         required
                         size="small"
@@ -60,6 +87,7 @@ function SignUp(props){
                         fullWidth
                         type="email"
                         label="Пошта"
+                        autoComplete='off'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -70,10 +98,13 @@ function SignUp(props){
                         fullWidth
                         label="Пароль"
                         type="password"
+                        autoComplete='off'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-
+                    {error !== "" &&
+                        <Alert variant="outlined" severity="error" onClose={() => setError("")}>{error}</Alert>
+                    }
                     <Button
                         type="submit"
                         fullWidth
@@ -91,15 +122,3 @@ function SignUp(props){
         </>
     )
 }
-
-const mapStateToProps = (state) => {
-    return {
-    };
-};
-const mapDispatchToProps = (dispatch) => {
-    return {
-        userSignUpFetch: (model) => dispatch(userSignUpFetch(model))
-    };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUp));

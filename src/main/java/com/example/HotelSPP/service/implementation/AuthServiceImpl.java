@@ -56,8 +56,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean registerUser(RegisterRequest registerRequest) {
-        if (userRepository.isSignedUp(registerRequest.getEmail())
-                || userRepository.isSignedUp(registerRequest.getPhone())) {
+        if (userRepository.isSignedUp(registerRequest.getPhone(), registerRequest.getEmail())) {
             return false;
         }
         User toRegister = User.builder()

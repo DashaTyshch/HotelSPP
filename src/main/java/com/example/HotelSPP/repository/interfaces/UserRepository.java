@@ -9,8 +9,8 @@ public interface UserRepository {
     User addUser(User user);
 
     Optional<User> findUserById(Long id);
-    Optional<User> findUserByEmail(String searchStr);
+    Optional<User> findUserByEmail(String email);
     Optional<User> findUserByPhone(String phone);
 
-    boolean isSignedUp(String searchStr);
+    boolean isSignedUp(String phone, String email);
 }

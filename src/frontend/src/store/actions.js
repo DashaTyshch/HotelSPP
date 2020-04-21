@@ -43,58 +43,12 @@ export function fetchUserInfo() {
     }
 }
 
-export const userLoginFetch = (phone, pwd) => {
-    return dispatch => {
-        return fetch("/api/auth/signIn", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify({login: phone, password: pwd})
-        })
-            .then(response => response.text())
-            .then(data => {
-                localStorage.setItem("token", data);
-                location.reload();
-            })
-
-            .catch(err => {
-                console.log("fetch error" + err);
-            });
-    }
-};
-
-export const userSignUpFetch = (model) => {
-    return dispatch => {
-        return fetch("/api/auth/signUp", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(model)
-        })
-            .then(response => response.text())
-            .then(data => {
-                localStorage.setItem("token", data);
-                location.reload();
-            })
-
-            .catch(err => {
-                console.log("fetch error" + err);
-            });
-    }
-};
-
-
 export const logOut = () => {
     return () => {
         removeToken();
         location.reload();
     }
 };
-
 
 export const getToken = () => {
     return localStorage.getItem('token');

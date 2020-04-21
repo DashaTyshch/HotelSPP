@@ -35,7 +35,6 @@ public class AuthControllerImpl implements AuthController {
             loginRequest.setLogin(signUpRequest.getPhone());
             loginRequest.setPassword(signUpRequest.getPassword());
             return authenticateUser(loginRequest);
-            //return new ResponseEntity<>("New user was created.", HttpStatus.CREATED);
         }
         return new ResponseEntity<>("Користувач з таким номером або поштою вже зареєстрований.",
                 HttpStatus.CONFLICT);

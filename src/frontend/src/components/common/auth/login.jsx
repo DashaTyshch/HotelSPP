@@ -1,18 +1,45 @@
 import React, {useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {Button, TextField} from "@material-ui/core";
-import {userLoginFetch} from "../../../store/actions";
-import {withRouter} from "react-router";
-import {connect} from "react-redux";
 import {useStyles} from "./authStyles";
+import Alert from '@material-ui/lab/Alert';
 
-function Login(props){
+export default function Login(props){
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const fetchLogin = () => fetch("/api/auth/signIn", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+        body: JSON.stringify({login: phone, password: password})
+    })
+        .then(function (res) {
+            if (res.ok) {
+                return res.text();
+            } else {
+                return res.json()
+                    .then(function (err) {
+                        throw new Error(err.message);
+                    });
+            }
+        });
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.userLoginFetch(phone, password);
+        setError("");
+        fetchLogin()
+            .then(data => {
+                localStorage.setItem("token", data);
+                location.reload();
+            })
+            .catch(err => {
+                setPassword("");
+                setError(err.message);
+            });
     };
 
     return (
@@ -21,7 +48,7 @@ function Login(props){
                 Ввійдіть у систему
             </Typography>
             <div className={useStyles().paper}>
-                <form className={useStyles().form} noValidate onSubmit={handleSubmit}>
+                <form className={useStyles().form} onSubmit={handleSubmit}>
                     <TextField
                         size="small"
                         margin="normal"
@@ -48,12 +75,15 @@ function Login(props){
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
+                    {error !== "" &&
+                        <Alert variant="outlined" severity="error" onClose={() => setError("")}>{error}</Alert>
+                    }
+
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        className={useStyles().submit}
-                    >
+                        className={useStyles().submit}>
                         Ввійти
                     </Button>
                     <div className={useStyles().signUp}>
@@ -65,15 +95,3 @@ function Login(props){
         </>
     )
 }
-
-const mapStateToProps = (state) => {
-    return {
-    };
-};
-const mapDispatchToProps = (dispatch) => {
-    return {
-        userLoginFetch: (phone, pwd) => dispatch(userLoginFetch(phone, pwd))
-    };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
