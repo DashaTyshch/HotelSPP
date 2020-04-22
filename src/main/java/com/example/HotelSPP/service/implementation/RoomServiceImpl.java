@@ -10,9 +10,8 @@ import com.example.HotelSPP.entity.RoomType;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -33,7 +32,7 @@ public class RoomServiceImpl implements RoomService {
         RoomType roomType = roomRepository.findRoomTypeByName(name).orElse(null);
         if(roomType == null)
             return null;
-        List<Image> images = roomRepository.findImagesById(roomType.getId());
+        List<Image> images = roomRepository.findImagesByIds(new ArrayList<>(Collections.singletonList(roomType.getId())));
         RoomTypeResponse result =  RoomTypeResponse.builder()
                 .name(roomType.getName())
                 .amount(roomType.getAmount())
@@ -89,18 +88,17 @@ public class RoomServiceImpl implements RoomService {
         List<RoomType> roomTypes = roomRepository.getAllRoomTypes();
         if(roomTypes.isEmpty())
             return null;
-
+        List<Image> images = roomRepository.findImagesByIds(roomTypes.stream().map(RoomType::getId).collect(Collectors.toList()));
         List<RoomTypeResponse> result = new ArrayList<>();
         for (RoomType roomType :
                 roomTypes) {
-            List<Image> images = roomRepository.findImagesById(roomType.getId());
             result.add(RoomTypeResponse.builder()
                     .name(roomType.getName())
                     .amount(roomType.getAmount())
                     .description(roomType.getDescription())
                     .places(roomType.getPlaces())
                     .price(roomType.getPrice())
-                    .images(images)
+                    .images(images.stream().filter(image -> image.getRoom_Type_Id() == roomType.getId()).collect(Collectors.toList()))
                     .build());
         }
         return result;

@@ -19,5 +19,5 @@ public interface RoomRepository {
 
     List<RoomType> getAllRoomTypes();
 
-    List<Image> findImagesById(int id);
+    List<Image> findImagesByIds(List<Integer> ids);
 }

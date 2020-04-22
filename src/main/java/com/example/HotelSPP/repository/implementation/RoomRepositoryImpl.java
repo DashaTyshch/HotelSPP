@@ -70,6 +70,8 @@ public class RoomRepositoryImpl implements RoomRepository {
     private String paramImageImg;
     @Value("${image.room_id}")
     private String paramImageRoomId;
+    @Value("${const.image.room_ids}")
+    private String paramImageRoomIds;
 
     @Value("${sql.insert.image}")
     private String ADD_IMAGE;
@@ -248,10 +250,10 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Image> findImagesById(int id) {
+    public List<Image> findImagesByIds(List<Integer> ids) {
         try {
             return Collections.unmodifiableList(namedTemplate.query(GET_IMAGE_BY_ROOM_ID,
-                    new MapSqlParameterSource(paramImageRoomId, id), new ImageMapper()));
+                    new MapSqlParameterSource(paramImageRoomIds, ids), new ImageMapper()));
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
