@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Value("${sql.select.ordersByState}")
     private String GET_ORDER_BY_STATE;
 
-    @Value("${sql.select.orderssByDate}")
+    @Value("${sql.select.ordersByDate}")
     private String GET_ORDER_BY_DATE;
 
     @Value("${sql.select.orders}")
