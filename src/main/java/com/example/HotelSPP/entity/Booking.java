@@ -21,6 +21,6 @@ public class Booking {
     private @NotNull boolean is_edited;
     private @NotNull String comment;
     private @NotNull long old_booking_id;
-    private @NotNull long room_type_id;
+    private @NotNull int room_type_id;
     private @NotNull long order_id;
 }
