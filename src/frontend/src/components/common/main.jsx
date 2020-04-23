@@ -26,6 +26,7 @@ function Main(props) {
                     <Route exact path='/' component={RoomsContainer}/>
                     <Route path='/roomType/:id' component={RoomTypeContainer}/>
                     <Route path='/newRoom' component={NewRoomContainer}/>
+                    <Route path='/profile' component={NewRoomContainer}/>
                 </Switch>
             </Container>
         </>
