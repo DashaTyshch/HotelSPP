@@ -2,6 +2,7 @@ package com.example.HotelSPP.controller.implementation;
 
 import com.example.HotelSPP.controller.interfaces.RoomTypeController;
 import com.example.HotelSPP.entity.RoomType;
+import com.example.HotelSPP.entity.request.FilterDates;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import com.example.HotelSPP.entity.response.RoomTypeResponse;
 import com.example.HotelSPP.service.interfaces.RoomService;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -43,8 +43,8 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     }
 
     @Override
-    public ResponseEntity<List<RoomType>> getAllFreeRoomTypes(Date start_date, Date end_date) {
-        return ResponseEntity.ok(service.getFreeRoomTypes(start_date, end_date));
+    public ResponseEntity<List<RoomType>> getAllFreeRoomTypes(FilterDates dates) {
+        return ResponseEntity.ok(service.getFreeRoomTypes(dates.getStart(), dates.getEnd()));
     }
 
 }

@@ -85,6 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/api/auth/signIn",
                         "/api/auth/signUp",
                         "/api/room_type/all",
+                        "/api/room_type//all_free_on_dates",
                         "/api/room_type/get",
                         "/api/auth/verifyRestoreToken",
                         "/api/auth/verifyActivationToken",

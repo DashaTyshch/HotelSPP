@@ -21,11 +21,15 @@ function RoomsMenu(props) {
     const style = useStyles();
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [places, setPlaces] = useState(1);
-    const [dates, setDates] = useState([new Date(), new Date()]);
 
     const handleSetPlaces = (value) => {
         setPlaces(value);
         props.filterByPlaces(value);
+    };
+
+    const handleDatesChanged = (value) => {
+        console.log(value);
+        props.setDates(value);
     };
 
     return (
@@ -38,11 +42,12 @@ function RoomsMenu(props) {
                     <DateRangePicker
                         isOpen={showDatePicker}
                         minDate={new Date()}
-                        value={dates}
-                        onChange={(value) => setDates(value)}
-                        format={'dd.MM.y'}
+                        value={props.dates}
+                        onChange={(value) => handleDatesChanged(value)}
+                        format={'dd/MM/y'}
                     />
                 </Col>
+
                 <Col xs={8} md={3} className='align-self-center'>
                     <FormControl fullWidth>
                         <InputLabel id="places-filter">Виберіть кількість гостей</InputLabel>

@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
-import RoomCards from "./roomCard.jsx";
+import RoomCards from "./roomCards.jsx";
 import RoomsMenu from './RoomsMenu.jsx';
 import connect from "react-redux/es/connect/connect";
 
 function RoomsContainer(props) {
     const [rooms, setRooms] = useState(null);
     const [filteredRooms, setFilteredRooms] = useState(null);
+    const [dates, setDates] = useState([new Date(), new Date(new Date().getDate() + 1)]);
 
     useEffect( () => {
-        fetch("/api/room_type/all", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                setRooms(data);
-                setFilteredRooms(data);
+        if(dates != undefined){
+            fetch(`/api/room_type/all_free_on_dates`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify({start: new Date(dates[0]), end: new Date(dates[1])})
             })
-            .catch(err => {
-                console.log("fetch error" + err);
-            });
-
-    }, []);
+                .then(response => response.json())
+                .then(data => {
+                    setRooms(data);
+                    setFilteredRooms(data);
+                })
+                .catch(err => {
+                    console.log("fetch error" + err);
+                });
+        }
+    }, [dates]);
 
     const filterByPlaces = (places) => {
         setFilteredRooms(rooms.filter(room => room.places >= places));
@@ -32,7 +35,7 @@ function RoomsContainer(props) {
 
     return (
         <>
-            <RoomsMenu filterByPlaces={filterByPlaces}/>
+            <RoomsMenu filterByPlaces={filterByPlaces} dates={dates} setDates={setDates}/>
             {filteredRooms !== null &&
                 <RoomCards rooms={filteredRooms}/>
             }
