@@ -1,5 +1,6 @@
 package com.example.HotelSPP.repository.implementation;
 
+import com.example.HotelSPP.entity.Booking;
 import com.example.HotelSPP.entity.Order;
 import com.example.HotelSPP.exceptions.ResourceNotFoundException;
 import com.example.HotelSPP.repository.interfaces.OrderRepository;

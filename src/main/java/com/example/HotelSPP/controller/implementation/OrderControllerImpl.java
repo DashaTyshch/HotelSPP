@@ -33,8 +33,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseEntity<String> postOrder(OrderRequest order) {
-        Order o = service.addOrder(order);
+    public ResponseEntity<String> postOrder(List<OrderRequest> bookings) {
+        Order o = service.addOrder(bookings);
         if (o==null)
             return new ResponseEntity<>("Таке замовлення вже існує", HttpStatus.CONFLICT);
         return ResponseEntity.ok(Long.toString(o.getId()));

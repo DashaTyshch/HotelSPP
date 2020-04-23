@@ -20,7 +20,7 @@ public interface OrderController {
     ResponseEntity<List<OrderResponse>> getAllOrders();
 
     @PostMapping("/create")
-    ResponseEntity<String> postOrder(@RequestBody OrderRequest Order);
+    ResponseEntity<String> postOrder(@RequestBody List<OrderRequest> Order);
 
     @GetMapping("/by_user")
     ResponseEntity<List<Order>> getOrdersForUser(@RequestParam long guest_id);

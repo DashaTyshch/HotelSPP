@@ -1,6 +1,7 @@
 package com.example.HotelSPP.repository.implementation;
 
 import com.example.HotelSPP.entity.Booking;
+import com.example.HotelSPP.exceptions.ResourceNotFoundException;
 import com.example.HotelSPP.repository.interfaces.BookingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,23 @@ public class BookingRepositoryImpl implements BookingRepository {
 
     @Override
     public Booking addBooking(Booking booking) {
-        return null;
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put(paramBookingsStartDate, booking.getStart_date());
+        paramMap.put(paramBookingsEndDate, booking.getEnd_date());
+        paramMap.put(paramBookingsPrice, booking.getPrice());
+        paramMap.put(paramBookingsPeriodPrice, booking.getPeriod_price());
+        paramMap.put(paramBookingsIsCanceled, booking.isIs_canceled());
+        paramMap.put(paramBookingsIsEdited, booking.isIs_edited());
+        paramMap.put(paramBookingsComment, booking.getComment());
+        paramMap.put(paramBookingsOldBookingId, booking.getOld_booking_id());
+        paramMap.put(paramBookingsRoomTypeId, booking.getRoom_type_id());
+        paramMap.put(paramBookingsOrderId, booking.getOrder_id());
+        namedTemplate.update(ADD_BOOKING, paramMap);
+
+        Optional<Booking> createdBooking = findBookingById(booking.getId());
+        return createdBooking.orElseThrow(
+                () -> new ResourceNotFoundException("Bookings", "name", booking.getId()));
+
     }
 
     @Override

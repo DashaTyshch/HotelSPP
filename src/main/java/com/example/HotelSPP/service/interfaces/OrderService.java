@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OrderService {
     OrderResponse getOrder(long id);
-    Order addOrder (OrderRequest order);
+    Order addOrder (List<OrderRequest> bookings);
     List<OrderResponse> getAllOrders ();
     List<Order> getOrdersForUser(long guest_id);
 }
