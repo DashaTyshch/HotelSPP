@@ -2,37 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router";
 
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-
+import { Nav, Navbar } from 'react-bootstrap';
 import {setLoginOpen, logOut} from "../../store/actions";
-
-const useStyles = makeStyles(theme => ({
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        flexGrow: 1,
-    },
-}));
 
 const Header = props => {
 
     return (
-        <AppBar position="static" color="secondary">
-            <Toolbar>
-                <Typography variant="h6" className={useStyles().title}>
-                    HotelSPP
-                </Typography>
+        <Navbar bg="dark" variant="dark" expand="md" fixed="top">
+            <Navbar.Brand href="/">HotelSPP</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                    {props.user != null &&
+                        <Nav.Link href="#/profile">Особистий кабінет</Nav.Link>
+                    }
+                </Nav>
                 {props.user == null ?
-                    <Button color="inherit" onClick={() => props.onSetLoginOpen(true)}>Ввійти</Button>
-                    : <Button color="inherit" onClick={props.logOut}>Вийти</Button>
+                    <Nav.Link style={{ color: '#D1E8E2' }} onClick={() => props.onSetLoginOpen(true)}>Ввійти</Nav.Link>
+                    : <Nav.Link style={{ color: '#D1E8E2' }} onClick={props.logOut}>Вийти</Nav.Link>
                 }
-            </Toolbar>
-        </AppBar>
+            </Navbar.Collapse>
+        </Navbar>
     );
 };
 
