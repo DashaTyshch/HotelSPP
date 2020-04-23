@@ -31,8 +31,8 @@ public class OrderServiceImpl implements OrderService {
             return null;
         OrderResponse result =  OrderResponse.builder()
                 .date_created(order.getDate_created())
-                .guest_id(order.getGuest_Id())
-                .state_id(order.getState_Id())
+                .guest_Id(order.getGuest_Id())
+                .state_Id(order.getState_Id())
                 .build();
         return result;
     }
@@ -41,10 +41,10 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(OrderRequest order) {
         if(orderRepository.ordersAvailable(order.getId())){
             try{
-                Order result =  orderRepository.addOrder(order.builder()
+                Order result =  orderRepository.addOrder(Order.builder()
                         .date_created(order.getDate_created())
-                        .guest_id(order.getGuest_Id())
-                        .state_id(order.getState_Id())
+                        .guest_Id(order.getGuest_Id())
+                        .state_Id(order.getState_Id())
                         .build());
                 return result;
             } catch (DuplicateKeyException e) {
@@ -64,18 +64,18 @@ public class OrderServiceImpl implements OrderService {
                 Orders) {
             result.add(OrderResponse.builder()
                     .date_created(order.getDate_created())
-                    .guest_id(order.getGuest_Id())
-                    .state_id(order.getState_Id())
+                    .guest_Id(order.getGuest_Id())
+                    .state_Id(order.getState_Id())
                     .build());
         }
         return result;
     }
 
     @Override
-    public List<Order> getOrdersForUser(long guest_id) {
+    public List<Order> getOrdersForUser(long guest_Id) {
         List<Order> all_orders = orderRepository.getAllOrders();
         for (int i=0; i<all_orders.size(); i++) {
-            if(all_orders.get(i).getGuest_Id != guest_id){
+            if(all_orders.get(i).getGuest_Id() != guest_Id){
                 all_orders.remove(i);
             }
         }

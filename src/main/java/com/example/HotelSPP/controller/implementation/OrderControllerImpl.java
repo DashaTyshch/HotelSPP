@@ -37,7 +37,7 @@ public class OrderControllerImpl implements OrderController {
         Order o = service.addOrder(order);
         if (o==null)
             return new ResponseEntity<>("Таке замовлення вже існує", HttpStatus.CONFLICT);
-        return ResponseEntity.ok(o.getName());
+        return ResponseEntity.ok(Long.toString(o.getId()));
     }
 
     @Override
