@@ -11,11 +11,9 @@ import java.util.Date;
 @Getter
 @ToString
 @Builder
-public class Orders {
+public class Order {
     private int id;
-    private @NotNull String name;
     private @NotNull Date date_created;
     private @NotNull long guest_Id;
-    private @NotNull long booking_Id;
     private @NotNull long state_Id;
 }
