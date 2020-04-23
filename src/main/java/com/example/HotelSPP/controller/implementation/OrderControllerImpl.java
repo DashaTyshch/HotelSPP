@@ -8,6 +8,7 @@ import com.example.HotelSPP.entity.response.OrderResponse;
 import com.example.HotelSPP.service.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,22 +24,24 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public ResponseEntity<OrderResponse> getOrder(long id) {
-
-        return null;
+        return ResponseEntity.ok(service.getOrder(id));
     }
 
     @Override
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
-        return null;
+        return ResponseEntity.ok(service.getAllOrders());
     }
 
     @Override
-    public ResponseEntity<String> postOrder(OrderRequest Order) {
-        return null;
+    public ResponseEntity<String> postOrder(OrderRequest order) {
+        Order o = service.addOrder(order);
+        if (o==null)
+            return new ResponseEntity<>("Таке замовлення вже існує", HttpStatus.CONFLICT);
+        return ResponseEntity.ok(o.getName());
     }
 
     @Override
     public ResponseEntity<List<Order>> getOrdersForUser(long guest_id) {
-        return null;
+        return ResponseEntity.ok(service.getOrdersForUser(guest_id));
     }
 }

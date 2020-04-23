@@ -58,7 +58,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 
     @Override
-    public boolean ordersAvailable(String name) {
+    public boolean ordersAvailable(long id) {
         return false;
     }
 
