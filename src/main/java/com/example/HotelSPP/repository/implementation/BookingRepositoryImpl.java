@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -115,11 +116,12 @@ public class BookingRepositoryImpl implements BookingRepository {
     public int amountOfBooked(Date start, Date end, int room_type_id) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(paramBookingsRoomTypeId, room_type_id);
-        paramMap.put(paramBookingsStartDate, start);
-        paramMap.put(paramBookingsEndDate, end);
+        paramMap.put(paramBookingsStartDate, "'" + new SimpleDateFormat("yyyy-MM-dd").format(start) + "'");
+        paramMap.put(paramBookingsEndDate, "'" + new SimpleDateFormat("yyyy-MM-dd").format(end) + "'");
 
         try{
-            return namedTemplate.queryForObject(GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN, paramMap, ResultSet::getInt);
+            return namedTemplate.queryForObject(GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN,
+                    paramMap, (resultSet, i) -> resultSet.getInt("count"));
         }catch(DataAccessException e){
             log.error("Error: ", e);
             throw e;

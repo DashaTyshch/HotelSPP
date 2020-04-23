@@ -43,7 +43,7 @@ public class RoomTypeControllerImpl implements RoomTypeController {
     }
 
     @Override
-    public ResponseEntity<List<RoomType>> getAllFreeRoomTypes(FilterDates dates) {
+    public ResponseEntity<List<RoomTypeResponse>> getAllFreeRoomTypes(FilterDates dates) {
         return ResponseEntity.ok(service.getFreeRoomTypes(dates.getStart(), dates.getEnd()));
     }
 

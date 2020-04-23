@@ -24,5 +24,5 @@ public interface RoomTypeController {
     ResponseEntity<String> postRoomType(@RequestBody RoomTypeRequest roomType);
 
     @PostMapping("/all_free_on_dates")
-    ResponseEntity<List<RoomType>> getAllFreeRoomTypes(@RequestBody FilterDates dates);
+    ResponseEntity<List<RoomTypeResponse>> getAllFreeRoomTypes(@RequestBody FilterDates dates);
 }
