@@ -3,6 +3,7 @@ package com.example.HotelSPP.repository.interfaces;
 import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.RoomType;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface RoomRepository {
     List<RoomType> getAllRoomTypes();
 
     List<Image> findImagesById(int id);
+
+    int amountOfBooked(Date start, Date end, int room_type_id);
 }

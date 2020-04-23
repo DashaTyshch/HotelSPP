@@ -11,6 +11,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,5 +105,16 @@ public class RoomServiceImpl implements RoomService {
                     .build());
         }
         return result;
+    }
+
+    @Override
+    public List<RoomTypeResponse> getFreeRoomTypes(Date start, Date end) {
+        List<RoomTypeResponse> all_room_types = getAllRoomTypes();
+        for (int i=0; i<all_room_types.size(); i++) {
+            //add id to RoomTypeResponse
+            //int booked = roomRepository.amountOfBooked(start, end, all_room_types.get(i).getId());
+            //all_room_types.get(i).getAmount() !!! set amount
+        }
+        return null;
     }
 }
