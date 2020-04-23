@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/room_type")
+@RequestMapping("/api/order")
 public class OrderControllerImpl implements OrderController {
     @Autowired
     private OrderService service;
