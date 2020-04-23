@@ -11,7 +11,7 @@ public interface BookingRepository {
 
     Optional<Booking> findBookingById(long id);
     Optional<Booking> findBookingByOldBookingId(long id);
-    Optional<Booking> findBookingsByRoomTypeId(long id);
+    Optional<Booking> findBookingsByRoomTypeId(int id);
     Optional<Booking> findBookingsByOrderId(long id);
     Optional<Booking> updateBooking(Booking b);
 

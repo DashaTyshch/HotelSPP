@@ -91,7 +91,7 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Optional<Booking> findBookingsByRoomTypeId(long id) {
+    public Optional<Booking> findBookingsByRoomTypeId(int id) {
         return Optional.empty();
     }
 
