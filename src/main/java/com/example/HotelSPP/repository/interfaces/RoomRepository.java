@@ -20,8 +20,5 @@ public interface RoomRepository {
 
     List<RoomType> getAllRoomTypes();
 
-    List<Image> findImagesById(int id);
-
-    int amountOfBooked(Date start, Date end, int room_type_id);
     List<Image> findImagesByIds(List<Integer> ids);
 }

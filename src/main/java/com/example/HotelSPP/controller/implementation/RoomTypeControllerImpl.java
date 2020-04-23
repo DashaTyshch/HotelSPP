@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -39,6 +40,11 @@ public class RoomTypeControllerImpl implements RoomTypeController {
                     HttpStatus.CONFLICT);
         service.addImages(rt.getId(), roomType.getImages());
         return ResponseEntity.ok(rt.getName());
+    }
+
+    @Override
+    public ResponseEntity<List<RoomType>> getAllFreeRoomTypes(Date start_date, Date end_date) {
+        return ResponseEntity.ok(service.getFreeRoomTypes(start_date, end_date));
     }
 
 }

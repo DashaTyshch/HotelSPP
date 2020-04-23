@@ -65,18 +65,6 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Value("${sql.select.room_types}")
     private String GET_ALL_ROOM_TYPES;
 
-    @Value("${sql.select.amount_of_booked_for_room_type_on_date_span}")
-    private String GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN;
-
-    @Value("${bookings.room_type}")
-    private String paramBookingsRoomTypeId;
-
-    @Value("${bookings.start_date}")
-    private String paramStartDate;
-
-    @Value("${bookings.end_date}")
-    private String paramEndDate;
-
     @Value("${image.id}")
     private String paramImageId;
     @Value("${image.img}")
@@ -268,22 +256,6 @@ public class RoomRepositoryImpl implements RoomRepository {
             return Collections.unmodifiableList(namedTemplate.query(GET_IMAGE_BY_ROOM_ID,
                     new MapSqlParameterSource(paramImageRoomIds, ids), new ImageMapper()));
         } catch (DataAccessException e) {
-            log.error("Error: ", e);
-            throw e;
-        }
-    }
-
-    //amount of booked for a specific room type on a start-end date span
-    @Override
-    public int amountOfBooked(Date start, Date end, int room_type_id) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put(paramBookingsRoomTypeId, room_type_id);
-        paramMap.put(paramStartDate, start);
-        paramMap.put(paramEndDate, end);
-
-        try{
-            return namedTemplate.queryForObject(GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN, paramMap, ResultSet::getInt);
-        }catch(DataAccessException e){
             log.error("Error: ", e);
             throw e;
         }

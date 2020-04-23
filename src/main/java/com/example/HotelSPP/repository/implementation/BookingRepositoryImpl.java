@@ -5,13 +5,14 @@ import com.example.HotelSPP.repository.interfaces.BookingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
-import java.util.Optional;
+import java.sql.ResultSet;
+import java.util.*;
 
 @Slf4j
 @Repository
@@ -59,6 +60,9 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Value("${sql.select.bookings}")
     private String GET_ALL_BOOKINGS;
 
+    @Value("${sql.select.amount_of_booked_for_room_type_on_date_span}")
+    private String GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN;
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -104,5 +108,21 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     public List<Booking> getAllBookings() {
         return null;
+    }
+
+    //amount of booked for a specific room type on a start-end date span
+    @Override
+    public int amountOfBooked(Date start, Date end, int room_type_id) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put(paramBookingsRoomTypeId, room_type_id);
+        paramMap.put(paramBookingsStartDate, start);
+        paramMap.put(paramBookingsEndDate, end);
+
+        try{
+            return namedTemplate.queryForObject(GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN, paramMap, ResultSet::getInt);
+        }catch(DataAccessException e){
+            log.error("Error: ", e);
+            throw e;
+        }
     }
 }

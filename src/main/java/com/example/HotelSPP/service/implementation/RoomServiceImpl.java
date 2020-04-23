@@ -2,6 +2,7 @@ package com.example.HotelSPP.service.implementation;
 import com.example.HotelSPP.entity.Image;
 import com.example.HotelSPP.entity.request.RoomTypeRequest;
 import com.example.HotelSPP.entity.response.RoomTypeResponse;
+import com.example.HotelSPP.repository.interfaces.BookingRepository;
 import com.example.HotelSPP.repository.interfaces.RoomRepository;
 import com.example.HotelSPP.service.interfaces.RoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Service
 public class RoomServiceImpl implements RoomService {
     private RoomRepository roomRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
     public RoomServiceImpl(RoomRepository roomRepository){
@@ -36,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
         RoomType roomType = roomRepository.findRoomTypeByName(name).orElse(null);
         if(roomType == null)
             return null;
-        List<Image> images = roomRepository.findImagesById(roomType.getId());
+        List<Image> images = roomRepository.findImagesByIds(new ArrayList<>(Collections.singletonList(roomType.getId())));
         RoomTypeResponse result =  RoomTypeResponse.builder()
                 .name(roomType.getName())
                 .amount(roomType.getAmount())
@@ -96,27 +98,31 @@ public class RoomServiceImpl implements RoomService {
         List<RoomTypeResponse> result = new ArrayList<>();
         for (RoomType roomType :
                 roomTypes) {
-            List<Image> images = roomRepository.findImagesById(roomType.getId());
+            List<Image> images = roomRepository.findImagesByIds(roomTypes.stream().map(RoomType::getId).collect(Collectors.toList()));
             result.add(RoomTypeResponse.builder()
                     .name(roomType.getName())
                     .amount(roomType.getAmount())
                     .description(roomType.getDescription())
                     .places(roomType.getPlaces())
                     .price(roomType.getPrice())
-                    .images(images)
+                    .images(images.stream().filter(image -> image.getRoom_Type_Id() == roomType.getId()).collect(Collectors.toList()))
                     .build());
         }
         return result;
     }
 
     @Override
-    public List<RoomTypeResponse> getFreeRoomTypes(Date start, Date end) {
-        List<RoomTypeResponse> all_room_types = getAllRoomTypes();
+    public List<RoomType> getFreeRoomTypes(Date start, Date end) {
+        List<RoomType> all_room_types = roomRepository.getAllRoomTypes();
         for (int i=0; i<all_room_types.size(); i++) {
-            //add id to RoomTypeResponse
-            //int booked = roomRepository.amountOfBooked(start, end, all_room_types.get(i).getId());
-            //all_room_types.get(i).getAmount() !!! set amount
+            int booked = bookingRepository.amountOfBooked(start, end, all_room_types.get(i).getId());
+            int free = all_room_types.get(i).getAmount() - booked;
+            if(free > 0){
+                all_room_types.get(i).setAmount(free);
+            }else{
+                all_room_types.remove(i);
+            }
         }
-        return null;
+        return all_room_types;
     }
 }

@@ -13,5 +13,5 @@ public interface RoomService {
     RoomType addRoomType (RoomTypeRequest roomType);
     Boolean addImages (int id, List<String> images);
     List<RoomTypeResponse> getAllRoomTypes ();
-    List<RoomTypeResponse> getFreeRoomTypes(Date start, Date end);
+    List<RoomType> getFreeRoomTypes(Date start, Date end);
 }
