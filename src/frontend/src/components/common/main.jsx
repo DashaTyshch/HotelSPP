@@ -8,6 +8,7 @@ import NewRoomContainer from "../rooms/newRoomContainer.jsx";
 import connect from "react-redux/es/connect/connect";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import RoomTypeContainer from "../rooms/roomTypeContainer.jsx";
+import Profile from "../profile/profile.jsx";
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -26,7 +27,7 @@ function Main(props) {
                     <Route exact path='/' component={RoomsContainer}/>
                     <Route path='/roomType/:id' component={RoomTypeContainer}/>
                     <Route path='/newRoom' component={NewRoomContainer}/>
-                    <Route path='/profile' component={NewRoomContainer}/>
+                    <Route path='/profile' component={Profile}/>
                 </Switch>
             </Container>
         </>
