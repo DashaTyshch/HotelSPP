@@ -129,12 +129,7 @@ export default function RoomTypeContainer(props) {
     const calcTotalPrice = () => {
         const start = new Date(new Date(dates[0]).toDateString());
         const end = new Date(new Date(dates[1]).toDateString());
-        return (end.getTime() - start.getTime()) / (60*60*1000*24);
-        // const timestamp = Math.abs(new Date(dates[0]) - new Date(dates[1]));
-        // var date = new Date();
-        // date.setTime(timestamp);
-        // alert(date.getDay());
-        // return date.getDay();
+        return (end.getTime() - start.getTime()) / (60*60*1000*24) * roomType.price;
     };
 
     return (
