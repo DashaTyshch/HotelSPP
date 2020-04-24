@@ -3,13 +3,16 @@ package com.example.HotelSPP.controller.implementation;
 
 import com.example.HotelSPP.controller.interfaces.OrderController;
 import com.example.HotelSPP.entity.Order;
+import com.example.HotelSPP.entity.User;
 import com.example.HotelSPP.entity.request.OrderRequest;
 import com.example.HotelSPP.entity.response.OrderResponse;
+import com.example.HotelSPP.security.UserPrincipal;
 import com.example.HotelSPP.service.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +44,12 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseEntity<List<Order>> getOrdersForUser(long guest_id) {
-        return ResponseEntity.ok(service.getOrdersForUser(guest_id));
+    public ResponseEntity<List<Order>> getOrdersForUser() {
+        User user = getCurrentUser();
+        return ResponseEntity.ok(service.getOrdersForUser(user.getId()));
+    }
+
+    private User getCurrentUser() {
+        return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 }

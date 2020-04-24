@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {withRouter} from "react-router";
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import BookingCard from "./bookingCard.jsx";
+import {getToken} from "../../store/actions";
 
 const ProfileContainer = styled.div`
     display: flex;
@@ -34,6 +35,26 @@ const BookingsContainer = styled.div`
 `;
 
 function Profile(props) {
+    const [orders, setOrders] = useState([]);
+
+    useEffect( () => {
+        fetch(`/api/order/by_user`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                setOrders(data);
+            })
+
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+    }, []);
 
     return (
         <>{ props.user !== null &&
@@ -42,17 +63,16 @@ function Profile(props) {
 
                     <Label>Поточні бронювання</Label>
                     <BookingsContainer>
-                        {[1,2,3,4].map(el => {
-                            return <BookingCard/>
+                        {orders.length > 0
+                            ? orders.map(order => {
+                                return <BookingCard order={order}/>
                             })
+                            : <div>Бронювань немає</div>
                         }
                     </BookingsContainer>
                     <Label>Історія бронювань</Label>
                     <BookingsContainer>
-                        {[1,2].map(el => {
-                            return <BookingCard/>
-                        })
-                        }
+
                     </BookingsContainer>
 
                 </ProfileContainer>

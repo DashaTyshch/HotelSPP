@@ -23,5 +23,5 @@ public interface OrderController {
     ResponseEntity<String> postOrder(@RequestBody List<OrderRequest> Order);
 
     @GetMapping("/by_user")
-    ResponseEntity<List<Order>> getOrdersForUser(@RequestParam long guest_id);
+    ResponseEntity<List<Order>> getOrdersForUser();
 }

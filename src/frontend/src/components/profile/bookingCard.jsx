@@ -1,6 +1,13 @@
 import React from "react";
 import styled from 'styled-components';
 
+const getStatus = (id) => {
+    switch (id) {
+        case 1: return "Чекає підтвердження";
+        case 2: return "Підверджено";
+        case 3: return "Скасовано";
+    }
+};
 const Card = styled.div`
     width: 350px;
     background: #D1E8E2;
@@ -29,14 +36,13 @@ export default function BookingCard(props) {
 
     return (
         <Card>
-            <div><Label>Чекає підтвердження</Label></div>
+            <div><Label>{getStatus(props.order.state_Id)}</Label></div>
             <div>
                 <div>12.02.2020 - 15.02.2020</div>
                 <div>Студія</div>
                 <div>-</div>
+                <div>Створено {props.order.date_created}</div>
             </div>
-            <button/>
-            <button/>
         </Card>
     )
 }
