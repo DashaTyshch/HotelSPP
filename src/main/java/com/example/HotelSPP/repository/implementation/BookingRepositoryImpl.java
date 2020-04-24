@@ -78,7 +78,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Booking addBooking(Booking booking) {
+    public void addBooking(Booking booking) {
+        int id;
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(paramBookingsStartDate, booking.getStart_date());
         paramMap.put(paramBookingsEndDate, booking.getEnd_date());
@@ -90,11 +91,16 @@ public class BookingRepositoryImpl implements BookingRepository {
         paramMap.put(paramBookingsOldBookingId, booking.getOld_booking_id());
         paramMap.put(paramBookingsRoomTypeId, booking.getRoom_type_id());
         paramMap.put(paramBookingsOrderId, booking.getOrder_id());
-        namedTemplate.update(ADD_BOOKING, paramMap);
-
-        Optional<Booking> createdBooking = findBookingById(booking.getId());
-        return createdBooking.orElseThrow(
-                () -> new ResourceNotFoundException("Bookings", "name", booking.getId()));
+        //namedTemplate.update(ADD_BOOKING, paramMap);
+        try {
+            id = namedTemplate.queryForObject(ADD_BOOKING, paramMap,  (resultSet, i) -> resultSet.getInt("id"));
+        } catch (DataAccessException e) {
+            log.error("Error: ", e);
+            throw e;
+        }
+//        Optional<Booking> createdBooking = findBookingById(id);
+//        return createdBooking.orElseThrow(
+//                () -> new ResourceNotFoundException("Bookings", "id", id));
 
     }
 

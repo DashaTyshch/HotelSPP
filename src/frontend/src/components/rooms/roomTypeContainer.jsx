@@ -6,6 +6,7 @@ import Carousel from '@brainhubeu/react-carousel';
 import {Button, TextField} from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {getToken} from "../../store/actions";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -84,6 +85,7 @@ export default function RoomTypeContainer(props) {
     const dates = JSON.parse(localStorage.getItem('dates'));
     const [roomType, setRoomType] = useState(null);
     const [comment, setComment] = useState("");
+    const [message, setMessage] = useState("");
 
     useEffect( () => {
         fetch(`/api/room_type/get?name=${id}`, {
@@ -102,34 +104,36 @@ export default function RoomTypeContainer(props) {
             });
     }, []);
 
-    const handleSubmit = () => {
+    const calcTotalPrice = () => {
+        const start = new Date(new Date(dates[0]).toDateString());
+        const end = new Date(new Date(dates[1]).toDateString());
+        return (end.getTime() - start.getTime()) / (60*60*1000*24) * roomType.price;
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
         fetch(`/api/order/create`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
+                'Authorization': `Bearer ${getToken()}`,
             },
             body: JSON.stringify([{
                 start_date: dates[0],
                 end_date: dates[1],
                 price: roomType.price,
-                period_price,
+                period_price: calcTotalPrice(),
                 comment,
                 room_type_id: roomType.id}])
         })
             .then(response => response.json())
             .then(data => {
-                setRoomType(data);
+                setMessage('Ваше бронювання створене!');
             })
             .catch(err => {
                 console.log("fetch error" + err);
             });
-    };
-
-    const calcTotalPrice = () => {
-        const start = new Date(new Date(dates[0]).toDateString());
-        const end = new Date(new Date(dates[1]).toDateString());
-        return (end.getTime() - start.getTime()) / (60*60*1000*24) * roomType.price;
     };
 
     return (
@@ -188,8 +192,8 @@ export default function RoomTypeContainer(props) {
                                                value={comment}
                                                onChange={(e) => setComment(e.target.value)}
                                     />
-                                    {/*error !== "" &&
-                                        <Alert variant="outlined" severity="error" onClose={() => setError("")}>{error}</Alert>*/
+                                    {message !== "" &&
+                                        <Alert variant="outlined" severity="success" onClose={() => setMessage("")}>{message}</Alert>
                                     }
 
                                     <Button color="secondary" className={styles.submit}

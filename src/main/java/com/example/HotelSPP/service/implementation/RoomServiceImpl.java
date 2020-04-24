@@ -41,6 +41,7 @@ public class RoomServiceImpl implements RoomService {
             return null;
         List<Image> images = roomRepository.findImagesByIds(new ArrayList<>(Collections.singletonList(roomType.getId())));
         RoomTypeResponse result =  RoomTypeResponse.builder()
+                .id(roomType.getId())
                 .name(roomType.getName())
                 .amount(roomType.getAmount())
                 .description(roomType.getDescription())
@@ -101,6 +102,7 @@ public class RoomServiceImpl implements RoomService {
                 roomTypes) {
             List<Image> images = roomRepository.findImagesByIds(roomTypes.stream().map(RoomType::getId).collect(Collectors.toList()));
             result.add(RoomTypeResponse.builder()
+                    .id(roomType.getId())
                     .name(roomType.getName())
                     .amount(roomType.getAmount())
                     .description(roomType.getDescription())
@@ -130,6 +132,7 @@ public class RoomServiceImpl implements RoomService {
                 all_room_types) {
             List<Image> images = roomRepository.findImagesByIds(all_room_types.stream().map(RoomType::getId).collect(Collectors.toList()));
             result.add(RoomTypeResponse.builder()
+                    .id(roomType.getId())
                     .name(roomType.getName())
                     .amount(roomType.getAmount())
                     .description(roomType.getDescription())

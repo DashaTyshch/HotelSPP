@@ -14,14 +14,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 @Slf4j
 @Repository
@@ -73,15 +73,23 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order addOrder(Order order) {
+        int id;
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put(paramOrdersDateCreated, order.getDate_created());
         paramMap.put(paramOrdersGuestId, order.getGuest_Id());
         paramMap.put(paramOrdersState, order.getState_Id());
-        namedTemplate.update(ADD_ORDER, paramMap);
+        //namedTemplate.update(ADD_ORDER, paramMap);
 
-        Optional<Order> createdOrder = findOrderById(order.getId());
+        try {
+            id = namedTemplate.queryForObject(ADD_ORDER, paramMap,  (resultSet, i) -> resultSet.getInt("id"));
+        } catch (DataAccessException e) {
+            log.error("Error: ", e);
+            throw e;
+        }
+
+        Optional<Order> createdOrder = findOrderById(id);
         return createdOrder.orElseThrow(
-                () -> new ResourceNotFoundException("Orders", "name", order.getId()));
+                () -> new ResourceNotFoundException("Orders", "id", id));
 
     }
 

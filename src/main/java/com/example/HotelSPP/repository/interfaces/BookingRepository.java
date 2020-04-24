@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookingRepository {
     boolean bookingsAvailable(String name);
-    Booking addBooking(Booking booking);
+    void addBooking(Booking booking);
 
     Optional<Booking> findBookingById(long id);
     Optional<Booking> findBookingByOldBookingId(long id);

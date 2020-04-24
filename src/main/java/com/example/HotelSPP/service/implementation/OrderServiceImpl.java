@@ -28,8 +28,9 @@ public class OrderServiceImpl implements OrderService {
 
     private BookingRepository bookingRepository;
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository){
+    public OrderServiceImpl(OrderRepository orderRepository, BookingRepository bookingRepository){
         this.orderRepository = orderRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override

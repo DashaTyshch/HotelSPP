@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Builder
 public class RoomTypeResponse {
+    private @NotNull int id;
     private @NotNull String name;
     private @NotNull String description;
     private @NotNull int amount;
