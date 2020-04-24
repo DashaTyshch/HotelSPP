@@ -78,16 +78,10 @@ const BookingContainer = styled.div`
     alignItems: center;
 `;
 
-const BookingForm = styled.form`
-    width: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-`;
-
 export default function RoomTypeContainer(props) {
     let { id } = useParams();
     const styles = useStyles();
+    const dates = JSON.parse(localStorage.getItem('dates'));
     const [roomType, setRoomType] = useState(null);
     const [comment, setComment] = useState("");
 
@@ -107,6 +101,41 @@ export default function RoomTypeContainer(props) {
                 console.log("fetch error" + err);
             });
     }, []);
+
+    const handleSubmit = () => {
+        fetch(`/api/order/create`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify([{
+                start_date: dates[0],
+                end_date: dates[1],
+                price: roomType.price,
+                period_price,
+                comment,
+                room_type_id: roomType.id}])
+        })
+            .then(response => response.json())
+            .then(data => {
+                setRoomType(data);
+            })
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+    };
+
+    const calcTotalPrice = () => {
+        const start = new Date(new Date(dates[0]).toDateString());
+        const end = new Date(new Date(dates[1]).toDateString());
+        return (end.getTime() - start.getTime()) / (60*60*1000*24);
+        // const timestamp = Math.abs(new Date(dates[0]) - new Date(dates[1]));
+        // var date = new Date();
+        // date.setTime(timestamp);
+        // alert(date.getDay());
+        // return date.getDay();
+    };
 
     return (
         <>
@@ -141,13 +170,14 @@ export default function RoomTypeContainer(props) {
                             <h4>{roomType.description}</h4>
                             <div><Label>Кількість спальних місць: </Label><Info>{roomType.places}</Info></div>
                             <div><Label>Ціна за добу: </Label><Info>{roomType.price}UAH</Info></div>
+                            <div><Label>Загальна ціна: </Label><Info>{calcTotalPrice()}UAH</Info></div>
                         </InfoColumn>
 
                         <InfoColumn>
                             <BookingContainer>
-                                <form className={styles.form} >
-                                    <div><Label>Дата заїзду: </Label></div>
-                                    <div><Label>Дата виїзду: </Label></div>
+                                <form className={styles.form} onSubmit={handleSubmit}>
+                                    <div><Label>Дата заїзду: {new Date(dates[0]).toDateString()}</Label></div>
+                                    <div><Label>Дата виїзду: {new Date(dates[1]).toDateString()}</Label></div>
                                     <TextField size="normal" margin="normal"
                                                InputProps={{
                                                    style: {background: "#FFFFFF",

@@ -28,7 +28,6 @@ function RoomsMenu(props) {
     };
 
     const handleDatesChanged = (value) => {
-        console.log(value);
         props.setDates(value);
     };
 

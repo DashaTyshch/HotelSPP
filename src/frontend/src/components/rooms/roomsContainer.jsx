@@ -6,10 +6,11 @@ import connect from "react-redux/es/connect/connect";
 function RoomsContainer(props) {
     const [rooms, setRooms] = useState(null);
     const [filteredRooms, setFilteredRooms] = useState(null);
-    const [dates, setDates] = useState([new Date(), new Date(new Date().getDate() + 1)]);
+    const [dates, setDates] = useState([new Date(), new Date().setDate(new Date().getDate() + 1)]);
 
     useEffect( () => {
         if(dates != undefined){
+            localStorage.setItem('dates', JSON.stringify(dates));
             fetch(`/api/room_type/all_free_on_dates`, {
                 method: "POST",
                 headers: {
@@ -37,7 +38,7 @@ function RoomsContainer(props) {
         <>
             <RoomsMenu filterByPlaces={filterByPlaces} dates={dates} setDates={setDates}/>
             {filteredRooms !== null &&
-                <RoomCards rooms={filteredRooms}/>
+                <RoomCards rooms={filteredRooms} dates={dates}/>
             }
         </>
     );
