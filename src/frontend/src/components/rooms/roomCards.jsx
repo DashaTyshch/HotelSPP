@@ -102,7 +102,7 @@ export default function RoomCards(props) {
                                             Спальних місць: {room.places}
                                         </h3>
                                         <h3 className={classes.info}>
-                                            К-ть вільних: 3
+                                            К-ть вільних: {room.amount}
                                         </h3>
                                     </div>
                                 </Link>

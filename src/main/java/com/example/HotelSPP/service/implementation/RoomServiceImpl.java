@@ -116,16 +116,20 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomTypeResponse> getFreeRoomTypes(Date start, Date end) {
-        List<RoomType> all_room_types = roomRepository.getAllRoomTypes();
-        for (int i=0; i<all_room_types.size(); i++) {
-            int booked = bookingRepository.amountOfBooked(start, end, all_room_types.get(i).getId());
-            int free = all_room_types.get(i).getAmount() - booked;
-            if(free > 0){
-                all_room_types.get(i).setAmount(free);
-            }else{
-                all_room_types.remove(i);
-            }
-        }
+        List<RoomType> all_room_types = roomRepository
+                .getAllRoomTypes()
+                .stream()
+                .filter(rt -> rt.getAmount() - bookingRepository.amountOfBooked(start, end, rt.getId()) > 0)
+                .collect(Collectors.toList());
+//        for (int i=0; i<all_room_types.size(); i++) {
+//            int booked = bookingRepository.amountOfBooked(start, end, all_room_types.get(i).getId());
+//            int free = all_room_types.get(i).getAmount() - booked;
+//            if(free > 0){
+//                all_room_types.get(i).setAmount(free);
+//            }else{
+//                all_room_types.remove(i);
+//            }
+//        }
 
         List<RoomTypeResponse> result = new ArrayList<>();
         for (RoomType roomType :
