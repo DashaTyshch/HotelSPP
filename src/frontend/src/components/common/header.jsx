@@ -14,7 +14,10 @@ const Header = props => {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     {props.user != null &&
+                        <>
                         <Nav.Link href="#/profile">Особистий кабінет</Nav.Link>
+                        <Nav.Link href="#/bookings">Бронювання</Nav.Link>
+                        </>
                     }
                 </Nav>
                 {props.user == null ?
