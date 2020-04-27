@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -47,6 +48,11 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<List<Order>> getOrdersForUser() {
         User user = getCurrentUser();
         return ResponseEntity.ok(service.getOrdersForUser(user.getId()));
+    }
+
+    @Override
+    public ResponseEntity<List<OrderResponse>> getOrdersByDate(Date date) {
+        return ResponseEntity.ok(service.getOrdersByDate(date));
     }
 
     private User getCurrentUser() {

@@ -126,19 +126,14 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findOrdersByDate(Date date) {
-        Order res;
+    public List<Order> findOrdersByDate(Date date) {
         try {
-            res = namedTemplate.queryForObject(GET_ORDER_BY_DATE, new MapSqlParameterSource(
-                    paramOrdersState, date), new OrderMapper());
-        } catch (EmptyResultDataAccessException e) {
-            log.warn(String.format("Couldn't find order by date: %s", date));
-            res = null;
+            return Collections.unmodifiableList(namedTemplate.query(GET_ORDER_BY_DATE, new MapSqlParameterSource(
+                    paramOrdersDateCreated, date), new OrderMapper()));
         } catch (DataAccessException e) {
             log.error("Error: ", e);
             throw e;
         }
-        return Optional.ofNullable(res);
     }
 
     @Override

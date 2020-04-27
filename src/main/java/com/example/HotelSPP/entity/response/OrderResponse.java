@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -17,4 +18,5 @@ public class OrderResponse {
     private @NotNull Date date_created;
     private @NotNull long guest_Id;
     private @NotNull long state_Id;
+    private @NotNull List<BookingResponse> bookings;
 }

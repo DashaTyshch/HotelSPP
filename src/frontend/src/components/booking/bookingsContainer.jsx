@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import { withRouter } from "react-router";
 
@@ -7,10 +7,36 @@ import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import {Col, Row} from "react-bootstrap";
 import {userRole} from "../../constants/enums";
 import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import {getToken} from "../../store/actions";
 
 function BookingsContainer(props) {
     const [selectedDate, handleDateChange] = useState(new Date());
+    const [bookings, setBookings] = useState(null);
+
+    useEffect( () => {
+        fetch(`/api/order/orders_by_date`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify(selectedDate)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setBookings(data);
+            })
+            .catch(err => {
+                console.log("fetch error" + err);
+            });
+    }, []);
+
+    const bla = (value) => {
+        console.log(value);
+        handleDateChange(value);
+    };
 
     return (
         <>
@@ -18,7 +44,7 @@ function BookingsContainer(props) {
 
                 <Col xs={8} md={4} className='align-self-center text-center'>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker value={selectedDate} onChange={handleDateChange} color="secondary"
+                        <DatePicker value={selectedDate} onChange={bla} color="secondary"
                                     autoOk={true} variant="inline"/>
                     </MuiPickersUtilsProvider>
                 </Col>

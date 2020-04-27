@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -24,4 +25,7 @@ public interface OrderController {
 
     @GetMapping("/by_user")
     ResponseEntity<List<Order>> getOrdersForUser();
+
+    @PostMapping("/orders_by_date")
+    ResponseEntity<List<OrderResponse>> getOrdersByDate(@RequestBody Date date);
 }

@@ -1,6 +1,5 @@
 package com.example.HotelSPP.repository.interfaces;
 
-import com.example.HotelSPP.entity.Booking;
 import com.example.HotelSPP.entity.Order;
 
 import java.util.Date;
@@ -12,7 +11,7 @@ public interface OrderRepository {
     Order addOrder(Order order);
     Optional<Order> findOrderById(long id);
     Optional<Order> findOrderByState(String state);
-    Optional<Order> findOrdersByDate(Date date);
+    List<Order> findOrdersByDate(Date date);
     Optional<Order> updateOrder(Order o);
 
     List<Order> getAllOrders();

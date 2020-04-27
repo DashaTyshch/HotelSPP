@@ -1,18 +1,20 @@
 package com.example.HotelSPP.repository.implementation;
 
 import com.example.HotelSPP.entity.Booking;
-import com.example.HotelSPP.exceptions.ResourceNotFoundException;
 import com.example.HotelSPP.repository.interfaces.BookingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,6 +46,9 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Value("${bookings.order_id}")
     private String paramBookingsOrderId;
 
+    @Value("${const.booking.orders_ids}")
+    private String paramBookingOrdersIds;
+
     @Value("${sql.insert.bookings}")
     private String ADD_BOOKING;
 
@@ -65,6 +70,8 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Value("${sql.select.amount_of_booked_for_room_type_on_date_span}")
     private String GET_AMOUNT_OF_BOOKED_ON_DATE_SPAN;
 
+    @Value("${sql.select.bookingsByOrdersId}")
+    private String GET_BOOKINGS_BY_ORDERS_IDS;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -120,8 +127,14 @@ public class BookingRepositoryImpl implements BookingRepository {
     }
 
     @Override
-    public Optional<Booking> findBookingsByOrderId(long id) {
-        return Optional.empty();
+    public List<Booking> findBookingsByOrdersIds(List<Integer> ids) {
+        try {
+            return Collections.unmodifiableList(namedTemplate.query(GET_BOOKINGS_BY_ORDERS_IDS,
+                    new MapSqlParameterSource(paramBookingOrdersIds, ids), new BookingMapper()));
+        } catch (DataAccessException e) {
+            log.error("Error: ", e);
+            throw e;
+        }
     }
 
     @Override
@@ -148,6 +161,25 @@ public class BookingRepositoryImpl implements BookingRepository {
         }catch(DataAccessException e){
             log.error("Error: ", e);
             throw e;
+        }
+    }
+
+    private class BookingMapper implements RowMapper<Booking> {
+        @Override
+        public Booking mapRow(ResultSet rs, int arg1) throws SQLException {
+            return Booking.builder()
+                    .id(rs.getInt(paramBookingsId))
+                    .start_date(rs.getDate(paramBookingsStartDate))
+                    .end_date(rs.getDate(paramBookingsEndDate))
+                    .price(rs.getFloat(paramBookingsPrice))
+                    .period_price(rs.getFloat(paramBookingsPeriodPrice))
+                    .is_canceled(rs.getBoolean(paramBookingsIsCanceled))
+                    .is_edited(rs.getBoolean(paramBookingsIsEdited))
+                    .comment(rs.getString(paramBookingsComment))
+                    .old_booking_id(rs.getLong(paramBookingsOldBookingId))
+                    .room_type_id(rs.getInt(paramBookingsRoomTypeId))
+                    .order_id(rs.getLong(paramBookingsOrderId))
+                    .build();
         }
     }
 }

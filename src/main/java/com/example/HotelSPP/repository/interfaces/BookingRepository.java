@@ -1,5 +1,6 @@
 package com.example.HotelSPP.repository.interfaces;
 import com.example.HotelSPP.entity.Booking;
+import com.example.HotelSPP.entity.Image;
 
 import java.util.Date;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface BookingRepository {
     Optional<Booking> findBookingById(long id);
     Optional<Booking> findBookingByOldBookingId(long id);
     Optional<Booking> findBookingsByRoomTypeId(int id);
-    Optional<Booking> findBookingsByOrderId(long id);
+    List<Booking> findBookingsByOrdersIds(List<Integer> ids);
     Optional<Booking> updateBooking(Booking b);
 
     List<Booking> getAllBookings();

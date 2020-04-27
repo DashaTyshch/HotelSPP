@@ -13,7 +13,7 @@ import java.util.Date;
 @ToString
 @Builder
 public class Order {
-    private long id;
+    private int id;
     private @NotNull Date date_created;
     private @NotNull long guest_Id;
     private @NotNull long state_Id;

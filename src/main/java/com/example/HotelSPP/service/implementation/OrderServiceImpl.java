@@ -1,36 +1,39 @@
 package com.example.HotelSPP.service.implementation;
 
 
-import com.example.HotelSPP.entity.Booking;
-import com.example.HotelSPP.entity.Order;
-import com.example.HotelSPP.entity.User;
+import com.example.HotelSPP.entity.*;
 import com.example.HotelSPP.entity.request.OrderRequest;
+import com.example.HotelSPP.entity.response.BookingResponse;
 import com.example.HotelSPP.entity.response.OrderResponse;
 import com.example.HotelSPP.repository.interfaces.BookingRepository;
 import com.example.HotelSPP.repository.interfaces.OrderRepository;
+import com.example.HotelSPP.repository.interfaces.RoomRepository;
 import com.example.HotelSPP.security.UserPrincipal;
 import com.example.HotelSPP.service.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
-
     private BookingRepository bookingRepository;
+    private RoomRepository roomRepository;
+
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, BookingRepository bookingRepository){
+    public OrderServiceImpl(OrderRepository orderRepository, BookingRepository bookingRepository,
+                            RoomRepository roomRepository){
         this.orderRepository = orderRepository;
         this.bookingRepository = bookingRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -103,6 +106,38 @@ public class OrderServiceImpl implements OrderService {
         }
         return all_orders;
     }
+
+    @Override
+    public List<OrderResponse> getOrdersByDate(java.util.Date date) {
+        List<Order> orders = orderRepository.findOrdersByDate(date);
+
+        List<OrderResponse> result = new ArrayList<>();
+        if(orders.isEmpty())
+            return result;
+
+        List<Booking> bookings =
+                bookingRepository.findBookingsByOrdersIds(orders.stream().map(Order::getId).collect(Collectors.toList()));
+        for (Order order :
+                orders) {
+            List<Booking> orderBookings = bookings.stream().filter(booking -> booking.getOrder_id() == order.getId())
+                    .collect(Collectors.toList());
+            result.add(OrderResponse.builder()
+                    .id(order.getId())
+                    .guest_Id(order.getGuest_Id())
+                    .state_Id(order.getState_Id())
+                    .bookings(orderBookings.stream().map(booking -> BookingResponse.builder()
+                            .comment(booking.getComment())
+                            .end_date(booking.getEnd_date())
+                            .period_price(booking.getPeriod_price())
+                            .price(booking.getPrice())
+                            .room_type(roomRepository.findRoomTypeById(booking.getRoom_type_id()).get().getName())
+                            .start_date(booking.getStart_date())
+                            .build()).collect(Collectors.toList()))
+                    .build());
+        }
+        return result;
+    }
+
     private User getCurrentUser() {
         return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }

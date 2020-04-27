@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface RoomService {
+    RoomType getRoomTypeById(int id);
     RoomTypeResponse getRoomType(String name);
     int updateRoomType(RoomType rt);
     RoomType addRoomType (RoomTypeRequest roomType);
