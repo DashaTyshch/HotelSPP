@@ -123,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
                     .collect(Collectors.toList());
             result.add(OrderResponse.builder()
                     .id(order.getId())
+                    .date_created(order.getDate_created())
                     .guest_Id(order.getGuest_Id())
                     .state_Id(order.getState_Id())
                     .bookings(orderBookings.stream().map(booking -> BookingResponse.builder()
