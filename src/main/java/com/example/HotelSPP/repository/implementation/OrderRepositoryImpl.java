@@ -194,7 +194,7 @@ public class OrderRepositoryImpl implements OrderRepository {
                     .id(rs.getInt(paramOrdersId))
                     .date_created(rs.getDate(paramOrdersDateCreated))
                     .guest_Id(rs.getLong(paramOrdersGuestId))
-                    .state_Id(rs.getInt(paramOrderStateId))
+                    .state_Id(rs.getInt(paramOrdersState))
                     .build();
         }
     }
