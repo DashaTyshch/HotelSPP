@@ -7,6 +7,9 @@ import {Button, TextField} from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {getToken} from "../../store/actions";
+import {withRouter} from "react-router";
+import {connect} from "react-redux";
+import {userRole} from "../../constants/enums";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -79,7 +82,7 @@ const BookingContainer = styled.div`
     alignItems: center;
 `;
 
-export default function RoomTypeContainer(props) {
+function RoomTypeContainer(props) {
     let { id } = useParams();
     const styles = useStyles();
     const dates = JSON.parse(localStorage.getItem('dates'));
@@ -173,41 +176,58 @@ export default function RoomTypeContainer(props) {
                         </InfoColumn>
 
                         <InfoColumn>
-                            <BookingContainer>
-                                <form className={styles.form} onSubmit={handleSubmit}>
-                                    <div><Label>Дата заїзду: {new Date(dates[0]).toDateString()}</Label></div>
-                                    <div><Label>Дата виїзду: {new Date(dates[1]).toDateString()}</Label></div>
-                                    <TextField size="normal" margin="normal"
-                                               InputProps={{
-                                                   style: {background: "#FFFFFF",
-                                                            boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.4)",
-                                                            borderRadius: "5px"},
-                                                }}
-                                               id="comment"
-                                               label="Коментар"
-                                               multiline
-                                               rows="8"
-                                               cols="8"
-                                               variant="outlined"
-                                               value={comment}
-                                               onChange={(e) => setComment(e.target.value)}
-                                    />
-                                    {message !== "" &&
-                                        <Alert variant="outlined" severity="success" onClose={() => setMessage("")}>{message}</Alert>
-                                    }
+                            { props.user == null
+                                ? <Label>Увійдіть у систему, щоб забронювати!</Label>
+                                : props.user.role == userRole.USER &&
+                                        <BookingContainer>
+                                            <form className={styles.form} onSubmit={handleSubmit}>
+                                                <div><Label>Дата заїзду: {new Date(dates[0]).toDateString()}</Label></div>
+                                                <div><Label>Дата виїзду: {new Date(dates[1]).toDateString()}</Label></div>
+                                                <TextField size="normal" margin="normal"
+                                                           InputProps={{
+                                                               style: {background: "#FFFFFF",
+                                                                   boxShadow: "4px 4px 10px rgba(0, 0, 0, 0.4)",
+                                                                   borderRadius: "5px"},
+                                                           }}
+                                                           id="comment"
+                                                           label="Коментар"
+                                                           multiline
+                                                           rows="8"
+                                                           cols="8"
+                                                           variant="outlined"
+                                                           value={comment}
+                                                           onChange={(e) => setComment(e.target.value)}
+                                                />
+                                                {message !== "" &&
+                                                <Alert variant="outlined" severity="success" onClose={() => setMessage("")}>{message}</Alert>
+                                                }
 
-                                    <Button color="secondary" className={styles.submit}
-                                        type="submit"
-                                        fullWidth
-                                        variant="contained">
-                                        Додати до бронювання
-                                    </Button>
-                                </form>
-                            </BookingContainer>
+                                                <Button color="secondary" className={styles.submit}
+                                                        type="submit"
+                                                        fullWidth
+                                                        variant="contained">
+                                                    Додати до бронювання
+                                                </Button>
+                                            </form>
+                                        </BookingContainer>
+                            }
                         </InfoColumn>
+
                     </InfoContainer>
                 </>
             }
         </>
     );
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+    };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RoomTypeContainer));

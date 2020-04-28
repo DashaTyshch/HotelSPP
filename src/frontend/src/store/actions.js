@@ -45,6 +45,7 @@ export function fetchUserInfo() {
 
 export const logOut = () => {
     return () => {
+        setUser(null);
         removeToken();
         location.reload();
     }

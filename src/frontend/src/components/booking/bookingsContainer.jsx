@@ -159,7 +159,7 @@ function BookingsContainer(props) {
                                             </Col>
                                         </Row>
                                     })}
-                                <div>
+                                <div className="align-self-center">
                                     <Button
                                         variant="contained"
                                         color="secondary"
@@ -170,7 +170,7 @@ function BookingsContainer(props) {
                                     <Button
                                         type="submit"
                                         variant="contained"
-                                        className={`${style.button} ${useStyles.confirmBtn}`}>
+                                        className={`${style.button} ${style.confirmBtn}`}>
                                         Підтвердити
                                     </Button>
                                 </div>

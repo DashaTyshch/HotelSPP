@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 
 import { Nav, Navbar } from 'react-bootstrap';
 import {setLoginOpen, logOut} from "../../store/actions";
+import {userRole} from "../../constants/enums";
 
 const Header = props => {
 
@@ -15,8 +16,12 @@ const Header = props => {
                 <Nav className="mr-auto">
                     {props.user != null &&
                         <>
-                        <Nav.Link href="#/profile">Особистий кабінет</Nav.Link>
-                        <Nav.Link href="#/bookings">Бронювання</Nav.Link>
+                            {props.user.role == userRole.USER &&
+                                <Nav.Link href="#/profile">Особистий кабінет</Nav.Link>
+                            }
+                            {props.user.role == userRole.HEAD &&
+                                <Nav.Link href="#/bookings">Бронювання</Nav.Link>
+                            }
                         </>
                     }
                 </Nav>

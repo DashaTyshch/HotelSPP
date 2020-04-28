@@ -10,6 +10,8 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import RoomTypeContainer from "../rooms/roomTypeContainer.jsx";
 import Profile from "../profile/profile.jsx";
 import BookingsContainer from "../booking/bookingsContainer.jsx";
+import PrivateRoute from "./privateRoute.jsx";
+import {userRole} from "../../constants/enums";
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -28,8 +30,8 @@ function Main(props) {
                     <Route exact path='/' component={RoomsContainer}/>
                     <Route path='/roomType/:id' component={RoomTypeContainer}/>
                     <Route path='/newRoom' component={NewRoomContainer}/>
-                    <Route path='/bookings' component={BookingsContainer}/>
-                    <Route path='/profile' component={Profile}/>
+                    <PrivateRoute path='/bookings' component={BookingsContainer} role={userRole.HEAD}/>
+                    <PrivateRoute path='/profile' component={Profile} role={userRole.USER}/>
                 </Switch>
             </Container>
         </>
