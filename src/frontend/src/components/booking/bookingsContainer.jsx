@@ -7,8 +7,9 @@ import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import {Col, Row} from "react-bootstrap";
 import {userRole} from "../../constants/enums";
-import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {getToken} from "../../store/actions";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const getStatus = (id) => {
     switch (id) {
@@ -17,6 +18,25 @@ const getStatus = (id) => {
         case 3: return "Скасовано";
     }
 };
+
+const useStyles = makeStyles(theme => ({
+    button: {
+        margin: theme.spacing(3),
+        '&:hover': {
+            backgroundColor: theme.palette.lightBlue.backgroundColor,
+            color: theme.palette.blue.color
+        },
+    },
+    confirmBtn: {
+        backgroundColor: theme.palette.blue.backgroundColor,
+        color: theme.palette.blue.color,
+    },
+}));
+
+const Dark = styled.span`
+    color: #2C3531;
+    font-size: 17px;
+`;
 
 const Label = styled.div`
     font-size: 20px;
@@ -38,7 +58,7 @@ const Order = styled.div`
     height: 250px;
     display: flex;
     flex-direction: column;
-    background: rgb(209, 232, 226);
+    background: #d1e8e21f;
     border-radius: 5px;
     margin: 15px;
 `;
@@ -52,11 +72,27 @@ const Status = styled.div`
     margin: 5px;
 `;
 
+const OrderNumber = styled.div`
+    font-weight: 500;
+    font-size: 20px;
+    color: #2C3531;
+    text-align: center;
+`;
+const Info = styled.span`
+    color: #31708E;
+    font-size: 18px;
+    font-weight: 500;
+`;
+const InfoRoom = styled(Info)`
+
+`;
+
 function BookingsContainer(props) {
-    const [selectedDate, handleDateChange] = useState(new Date());
+    const style = useStyles();
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [orders, setOrders] = useState(null);
 
-    useEffect( () => {
+    const getOrders = () => {
         fetch(`/api/order/orders_by_date`, {
             method: "POST",
             headers: {
@@ -74,11 +110,14 @@ function BookingsContainer(props) {
             .catch(err => {
                 console.log("fetch error" + err);
             });
-    }, []);
+    };
 
-    const bla = (value) => {
-        console.log(value);
-        handleDateChange(value);
+    useEffect( () => {
+        getOrders();
+    }, [selectedDate]);
+
+    const handleDateChanged = (value) => {
+        setSelectedDate(value);
     };
 
     return (
@@ -89,12 +128,9 @@ function BookingsContainer(props) {
                 </Col>
                 <Col xs={12} className='align-self-center text-center'>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker value={selectedDate} onChange={bla} color="secondary"
+                        <DatePicker value={selectedDate} onChange={handleDateChanged} color="secondary"
                                     autoOk={true} variant="inline"/>
                     </MuiPickersUtilsProvider>
-                </Col>
-
-                <Col xs={8} md={3} className='align-self-center'>
                 </Col>
 
                 <OrdersContainer>
@@ -103,9 +139,44 @@ function BookingsContainer(props) {
                         ? orders.map(order => {
                             return <Order>
                                     <div><Status>{getStatus(order.state_Id)}</Status></div>
+                                    <OrderNumber>Номер бронювання {order.id}</OrderNumber>
+                                    {order.bookings.map(booking => {
+                                        return <Row>
+                                            <Col xs={12} md={6} className='align-self-center text-center'>
+                                                <Dark>З</Dark> <Info>{booking.start_date}</Info> <Dark>по</Dark> <Info>{booking.end_date}</Info>
+                                            </Col>
+                                            <Col xs={12} md={6} className='align-self-center text-center'>
+                                                <Dark>Номер:</Dark> <InfoRoom>{booking.room_type}</InfoRoom>
+                                            </Col>
+                                            <Col xs={12} md={6} className='align-self-center text-center'>
+                                                <Dark>Ціна за добу:</Dark> <InfoRoom>{booking.price} UAH</InfoRoom>
+                                            </Col>
+                                            <Col xs={12} md={6} className='align-self-center text-center'>
+                                                <Dark>Загальна ціна:</Dark> <InfoRoom>{booking.period_price} UAH</InfoRoom>
+                                            </Col>
+                                            <Col xs={12} className='align-self-center text-center'>
+                                                <Dark>Коментар:</Dark> <InfoRoom>{booking.comment}</InfoRoom>
+                                            </Col>
+                                        </Row>
+                                    })}
+                                <div>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={style.button}>
+                                        Скасувати
+                                    </Button>
+
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        className={`${style.button} ${useStyles.confirmBtn}`}>
+                                        Підтвердити
+                                    </Button>
+                                </div>
                                 </Order>
                             })
-                        : <div>На сьогодні бронювань немає</div>
+                        : <OrderNumber>Цього дня не було нових бронювань</OrderNumber>
                     }
                 </OrdersContainer>
             </Row>
